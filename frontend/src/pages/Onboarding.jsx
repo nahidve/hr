@@ -1,50 +1,33 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import api from "../services/api";
+import { Upload, User, Mail, Building2, FileUp, CheckCircle } from "lucide-react";
+import { MovingBorder } from "../components/ui/moving-border";
+import { ShimmerButton } from "../components/ui/shimmer-button";
 
 export default function Onboarding() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    department: "",
-  });
-
+  const [form, setForm] = useState({ name: "", email: "", department: "" });
   const [resume, setResume] = useState(null);
   const [loading, setLoading] = useState(false);
   const [employee, setEmployee] = useState(null);
 
   const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       setLoading(true);
-
       const formData = new FormData();
-
       formData.append("name", form.name);
       formData.append("email", form.email);
       formData.append("department", form.department);
       formData.append("resume", resume);
 
-      const { data } = await api.post(
-        "/onboarding",
-        formData
-      );
-
+      const { data } = await api.post("/onboarding", formData);
       setEmployee(data);
-
-      setForm({
-        name: "",
-        email: "",
-        department: "",
-      });
-
+      setForm({ name: "", email: "", department: "" });
       setResume(null);
     } catch (error) {
       console.error(error);
@@ -55,108 +38,150 @@ export default function Onboarding() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl p-6">
-      <h1 className="mb-6 text-3xl font-bold">
-        Employee Onboarding
-      </h1>
-
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4"
+    <div className="min-h-screen bg-slate-50 px-4 py-8 md:px-8">
+      <div className="mx-auto max-w-3xl">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
         >
-          <input
-            name="name"
-            placeholder="Full Name"
-            value={form.name}
-            onChange={handleChange}
-            className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
-          />
+          <h1 className="text-2xl font-semibold text-slate-900">Employee Onboarding</h1>
+          <p className="text-sm text-slate-500">Add new employees to the system</p>
+        </motion.div>
 
-          <input
-            name="email"
-            type="email"
-            placeholder="Email Address"
-            value={form.email}
-            onChange={handleChange}
-            className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
-          />
+        {/* Form */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+        >
+          <MovingBorder className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="relative">
+                <User className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
+                <input
+                  name="name"
+                  placeholder="Full Name"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-3 text-sm outline-none transition-colors focus:border-slate-400 focus:bg-white"
+                />
+              </div>
 
-          <input
-            name="department"
-            placeholder="Department"
-            value={form.department}
-            onChange={handleChange}
-            className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
-          />
+              <div className="relative">
+                <Mail className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
+                <input
+                  name="email"
+                  type="email"
+                  placeholder="Email Address"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-3 text-sm outline-none transition-colors focus:border-slate-400 focus:bg-white"
+                />
+              </div>
 
-          <input
-            type="file"
-            accept=".pdf"
-            onChange={(e) =>
-              setResume(e.target.files[0])
-            }
-            className="w-full rounded-lg border border-slate-300 p-3"
-          />
+              <div className="relative">
+                <Building2 className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
+                <input
+                  name="department"
+                  placeholder="Department"
+                  value={form.department}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-3 text-sm outline-none transition-colors focus:border-slate-400 focus:bg-white"
+                />
+              </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="rounded-lg bg-blue-600 px-5 py-3 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {loading
-              ? "Processing..."
-              : "Create Employee"}
-          </button>
-        </form>
-      </div>
+              <div className="relative">
+                <FileUp className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
+                <input
+                  type="file"
+                  accept=".pdf"
+                  onChange={(e) => setResume(e.target.files[0])}
+                  required
+                  className="w-full cursor-pointer rounded-lg border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm text-slate-500 outline-none transition-colors file:mr-4 file:rounded-md file:border-0 file:bg-slate-100 file:px-4 file:py-2 file:text-sm file:text-slate-700 hover:file:bg-slate-200 focus:border-slate-400 focus:bg-white"
+                />
+              </div>
 
-      {employee && (
-        <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="mb-4">
-            <h2 className="text-2xl font-bold">
-              {employee.name}
-            </h2>
-
-            <p className="text-slate-600">
-              {employee.email}
-            </p>
-
-            <p className="text-slate-600">
-              {employee.department}
-            </p>
-          </div>
-
-          <div>
-            <h3 className="mb-3 text-lg font-semibold">
-              Skills
-            </h3>
-
-            <div className="flex flex-wrap gap-2">
-              {employee.skills?.map(
-                (skill, index) => (
-                  <span
-                    key={index}
-                    className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700"
-                  >
-                    {skill}
+              <ShimmerButton
+                type="submit"
+                disabled={loading}
+                className="w-full justify-center rounded-lg bg-slate-900 py-3 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50"
+              >
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    Processing...
                   </span>
-                )
-              )}
-            </div>
-          </div>
+                ) : (
+                  "Create Employee"
+                )}
+              </ShimmerButton>
+            </form>
+          </MovingBorder>
+        </motion.div>
 
-          <div className="mt-6">
-            <h3 className="mb-3 text-lg font-semibold">
-              Experience Summary
-            </h3>
+        {/* Success Result */}
+        <AnimatePresence>
+          {employee && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50/50 p-6 shadow-sm backdrop-blur-sm"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <CheckCircle className="h-5 w-5 text-emerald-600" />
+                <h2 className="text-lg font-semibold text-slate-900">Employee Created</h2>
+              </div>
 
-            <p className="leading-relaxed text-slate-700">
-              {employee.experienceSummary}
-            </p>
-          </div>
-        </div>
-      )}
+              <div className="space-y-3">
+                <div>
+                  <p className="text-sm font-medium text-slate-700">{employee.name}</p>
+                  <p className="text-sm text-slate-500">{employee.email}</p>
+                  <p className="text-sm text-slate-500">{employee.department}</p>
+                </div>
+
+                {employee.skills?.length > 0 && (
+                  <div>
+                    <p className="mb-1.5 text-xs font-medium text-slate-500">Skills</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {employee.skills.map((skill, i) => (
+                        <span key={i} className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs text-slate-700">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {employee.experienceSummary && (
+                  <div>
+                    <p className="mb-1.5 text-xs font-medium text-slate-500">Experience Summary</p>
+                    <p className="text-sm text-slate-700">{employee.experienceSummary}</p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Empty State */}
+        {!employee && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.1 }}
+            className="mt-6 rounded-xl border border-dashed border-slate-300 bg-white/50 p-8 text-center backdrop-blur-sm"
+          >
+            <Upload className="mx-auto h-8 w-8 text-slate-300" />
+            <p className="mt-2 text-sm text-slate-400">Fill in the details and upload a resume to onboard an employee</p>
+          </motion.div>
+        )}
+      </div>
     </div>
   );
 }
