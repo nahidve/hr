@@ -27,25 +27,24 @@ app.get("/health", (req, res) => {
   });
 });
 
-/* ---------------- CORS ---------------- */
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "http://localhost:3000",
-  "https://hr-five-pi.vercel.app",
-];
-
 app.use(
   cors({
     origin: function (origin, callback) {
-      // allow server-to-server / postman
+      // allow mobile apps, postman, curl
       if (!origin) return callback(null, true);
+
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:3000",
+        "https://hr-five-pi.vercel.app",
+      ];
 
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
 
-      // IMPORTANT: do NOT throw error (breaks headers on Render)
+      // IMPORTANT: do NOT throw error
       return callback(null, true);
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
