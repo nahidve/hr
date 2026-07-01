@@ -85,3 +85,25 @@ Return ONLY valid JSON.
     });
   }
 };
+
+export const getLeaveRequests =
+  async (req, res) => {
+    try {
+      const requests =
+        await LeaveRequest.find()
+          .populate(
+            "employeeId",
+            "name department"
+          )
+          .sort({
+            createdAt: -1,
+          })
+          .limit(5);
+
+      res.json(requests);
+    } catch (error) {
+      res.status(500).json({
+        error: error.message,
+      });
+    }
+  };
