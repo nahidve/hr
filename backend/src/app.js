@@ -1,13 +1,13 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-
 import connectDB from "./config/db.js";
 
 import onboardingRoutes from "./routes/onboardingRoutes.js";
 import policyRoutes from "./routes/policyRoutes.js";
 import leaveRoutes from "./routes/leaveRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import jobDescriptionRoutes from "./routes/jobDescriptionRoutes.js";
 
 const app = express();
 
@@ -21,9 +21,7 @@ app.get("/health", (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     database:
-      mongoose.connection.readyState === 1
-        ? "connected"
-        : "disconnected",
+      mongoose.connection.readyState === 1 ? "connected" : "disconnected",
   });
 });
 
@@ -50,7 +48,7 @@ app.use(
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-  })
+  }),
 );
 
 /* ---------------- Middleware ---------------- */
@@ -61,5 +59,6 @@ app.use("/api/onboarding", onboardingRoutes);
 app.use("/api/policies", policyRoutes);
 app.use("/api/leave", leaveRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/job-descriptions", jobDescriptionRoutes);
 
 export default app;

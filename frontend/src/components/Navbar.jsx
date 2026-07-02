@@ -38,6 +38,11 @@ export default function Navbar() {
       icon: FileText,
     },
     {
+      label: "JD Generator",
+      path: "/job-descriptions",
+      icon: Briefcase,
+    },
+    {
       label: "Leave AI",
       path: "/leave",
       icon: Calendar,

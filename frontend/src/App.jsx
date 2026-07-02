@@ -7,6 +7,7 @@ import LeaveRecommendation from "./pages/LeaveRecommendation";
 import EmployeeDirectory from "./pages/EmployeeDirectory";
 import EmployeeDetails from "./pages/EmployeeDetails";
 import Policies from "./pages/Policies";
+import JobDescriptionGenerator from "./pages/JobDescriptionGenerator";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/employees" element={<EmployeeDirectory />} />
         <Route path="/employees/:id" element={<EmployeeDetails />} />
         <Route path="/policies" element={<Policies />} />
+        <Route path="/job-descriptions" element={<JobDescriptionGenerator />} />
       </Routes>
     </BrowserRouter>
   );
