@@ -1,4 +1,4 @@
-# Cohere HR Portal
+# VE HR Portal
 
 An enterprise AI-driven human resource command center built with a minimalist, stark white editorial canvas aesthetic, dark product panels, and technical typography matching Cohere's 2026 design specifications.
 
@@ -9,6 +9,7 @@ The application leverages Cohere's design tokens and layout strategy to deliver 
 ## Technical Stack
 
 ### Frontend
+
 - **Framework**: React 19 & Vite 8
 - **Styling**: Tailwind CSS v4 (with custom `@theme` tokens)
 - **Routing**: React Router DOM v7
@@ -16,6 +17,7 @@ The application leverages Cohere's design tokens and layout strategy to deliver 
 - **Icons**: Lucide React
 
 ### Backend
+
 - **Framework**: Node.js & Express
 - **Database**: MongoDB (Mongoose ODM)
 
@@ -37,18 +39,21 @@ The application leverages Cohere's design tokens and layout strategy to deliver 
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js (v18+ recommended)
 - MongoDB running locally or a remote connection string
 
 ### Setup & Installation
 
 1. **Clone the Repository**:
+
    ```bash
    git clone <repository-url>
    cd HR
    ```
 
 2. **Run Backend Service**:
+
    ```bash
    cd backend
    npm install
@@ -57,6 +62,7 @@ The application leverages Cohere's design tokens and layout strategy to deliver 
    ```
 
 3. **Run Frontend Application**:
+
    ```bash
    cd ../frontend
    npm install
