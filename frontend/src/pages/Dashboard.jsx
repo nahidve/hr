@@ -3,15 +3,34 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import api from "../services/api";
 import StatCard from "../components/StatCard";
-import { Users, FileText, Calendar, ArrowRight, Clock, ChevronRight } from "lucide-react";
+import {
+  Users,
+  FileText,
+  Calendar,
+  ArrowRight,
+  Clock,
+  ChevronRight,
+} from "lucide-react";
 import { AnimatedGrid } from "../components/ui/animated-grid";
 import { ShimmerButton } from "../components/ui/shimmer-button";
 import { MovingBorder } from "../components/ui/moving-border";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
   const [employees, setEmployees] = useState([]);
   const [leaveRequests, setLeaveRequests] = useState([]);
+  const [analytics, setAnalytics] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -19,14 +38,21 @@ export default function Dashboard() {
 
   const fetchData = async () => {
     try {
-      const [statsResponse, employeesResponse, leaveResponse] = await Promise.all([
+      const [
+        statsResponse,
+        employeesResponse,
+        leaveResponse,
+        analyticsResponse,
+      ] = await Promise.all([
         api.get("/dashboard/stats"),
         api.get("/onboarding"),
         api.get("/leave/recent"),
+        api.get("/dashboard/analytics"),
       ]);
       setStats(statsResponse.data);
       setEmployees(employeesResponse.data.slice(0, 5));
       setLeaveRequests(leaveResponse.data);
+      setAnalytics(analyticsResponse.data);
     } catch (error) {
       console.error(error);
     }
@@ -49,7 +75,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-slate-50">
       <AnimatedGrid className="opacity-20" />
-      
+
       <div className="relative mx-auto max-w-7xl px-4 py-8 md:px-8">
         {/* Header */}
         <motion.div
@@ -59,7 +85,9 @@ export default function Dashboard() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-semibold text-slate-900">Dashboard</h1>
+              <h1 className="text-2xl font-semibold text-slate-900">
+                Dashboard
+              </h1>
               <p className="text-sm text-slate-500">HR analytics overview</p>
             </div>
             <ShimmerButton className="px-4 py-2 text-sm bg-slate-900 text-white hover:bg-slate-800 transition-colors rounded-lg">
@@ -86,8 +114,12 @@ export default function Dashboard() {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-slate-500">{item.title}</p>
-                  <p className="mt-1 text-3xl font-semibold text-slate-900">{item.value}</p>
+                  <p className="text-sm font-medium text-slate-500">
+                    {item.title}
+                  </p>
+                  <p className="mt-1 text-3xl font-semibold text-slate-900">
+                    {item.value}
+                  </p>
                 </div>
                 <div className="rounded-lg bg-slate-100 p-3">
                   <item.icon className="h-5 w-5 text-slate-600" />
@@ -96,6 +128,56 @@ export default function Dashboard() {
             </motion.div>
           ))}
         </motion.div>
+
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="text-lg font-semibold">Average Candidate Fit</h2>
+
+          <p className="mt-3 text-4xl font-bold">
+            {analytics?.averageFitScore}%
+          </p>
+        </div>
+
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-4 text-xl font-semibold">
+            Employees By Department
+          </h2>
+
+          <div className="h-80">
+            <ResponsiveContainer>
+              <PieChart>
+                <Pie
+                  data={analytics?.departmentData || []}
+                  dataKey="value"
+                  nameKey="name"
+                >
+                  {analytics?.departmentData?.map((entry, index) => (
+                    <Cell key={index} />
+                  ))}
+                </Pie>
+
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-4 text-xl font-semibold">Top Skills</h2>
+
+          <div className="h-80">
+            <ResponsiveContainer>
+              <BarChart data={analytics?.topSkills || []}>
+                <XAxis dataKey="skill" />
+
+                <YAxis />
+
+                <Tooltip />
+
+                <Bar dataKey="count" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
 
         {/* Two Column */}
         <div className="grid gap-6 lg:grid-cols-2">
@@ -107,7 +189,9 @@ export default function Dashboard() {
           >
             <MovingBorder className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-sm font-semibold text-slate-900">Recent Employees</h2>
+                <h2 className="text-sm font-semibold text-slate-900">
+                  Recent Employees
+                </h2>
                 <button className="text-sm text-slate-400 hover:text-slate-600 transition-colors flex items-center">
                   View all <ChevronRight className="ml-1 h-4 w-4" />
                 </button>
@@ -130,7 +214,9 @@ export default function Dashboard() {
                           {emp.name?.charAt(0) || "?"}
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-slate-900">{emp.name}</p>
+                          <p className="text-sm font-medium text-slate-900">
+                            {emp.name}
+                          </p>
                           <p className="text-xs text-slate-400">{emp.email}</p>
                         </div>
                       </div>
@@ -152,14 +238,18 @@ export default function Dashboard() {
           >
             <MovingBorder className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-sm font-semibold text-slate-900">Leave Requests</h2>
+                <h2 className="text-sm font-semibold text-slate-900">
+                  Leave Requests
+                </h2>
                 <button className="text-sm text-slate-400 hover:text-slate-600 transition-colors flex items-center">
                   View all <ChevronRight className="ml-1 h-4 w-4" />
                 </button>
               </div>
 
               {leaveRequests.length === 0 ? (
-                <p className="text-sm text-slate-400">No leave requests found.</p>
+                <p className="text-sm text-slate-400">
+                  No leave requests found.
+                </p>
               ) : (
                 <div className="space-y-3">
                   {leaveRequests.map((leave, index) => (
@@ -174,7 +264,9 @@ export default function Dashboard() {
                         <p className="text-sm font-medium text-slate-900">
                           {leave.employeeId?.name || "Unknown"}
                         </p>
-                        <p className="text-xs text-slate-400">{leave.reason || "No reason"}</p>
+                        <p className="text-xs text-slate-400">
+                          {leave.reason || "No reason"}
+                        </p>
                       </div>
                       <span
                         className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
