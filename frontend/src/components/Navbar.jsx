@@ -6,6 +6,7 @@ import {
   FileText,
   Calendar,
   UserSquare2,
+  Target,
 } from "lucide-react";
 
 export default function Navbar() {
@@ -36,6 +37,11 @@ export default function Navbar() {
       label: "Policies",
       path: "/policies",
       icon: FileText,
+    },
+    {
+      label: "Goals",
+      path: "/goals",
+      icon: Target,
     },
     {
       label: "JD Generator",

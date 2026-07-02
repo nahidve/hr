@@ -9,6 +9,7 @@ import leaveRoutes from "./routes/leaveRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import jobDescriptionRoutes from "./routes/jobDescriptionRoutes.js";
 import interviewRoutes from "./routes/interviewRoutes.js";
+import goalRoutes from "./routes/goalRoutes.js";
 
 const app = express();
 
@@ -62,5 +63,6 @@ app.use("/api/leave", leaveRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/job-descriptions", jobDescriptionRoutes);
 app.use("/api/interviews", interviewRoutes);
+app.use("/api/goals", goalRoutes);
 
 export default app;

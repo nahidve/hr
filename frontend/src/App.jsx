@@ -9,6 +9,7 @@ import EmployeeDetails from "./pages/EmployeeDetails";
 import Policies from "./pages/Policies";
 import JobDescriptionGenerator from "./pages/JobDescriptionGenerator";
 import InterviewGenerator from "./pages/InterviewGenerator";
+import Goals from "./pages/Goals";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/policies" element={<Policies />} />
         <Route path="/job-descriptions" element={<JobDescriptionGenerator />} />
         <Route path="/interviews" element={<InterviewGenerator />} />
+        <Route path="/goals" element={<Goals />} />
       </Routes>
     </BrowserRouter>
   );
