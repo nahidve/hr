@@ -3,6 +3,7 @@
 import Employee from "../models/Employee.js";
 import Policy from "../models/Policy.js";
 import LeaveRequest from "../models/LeaveRequest.js";
+import Goal from "../models/Goal.js";
 
 export const getStats = async (req, res) => {
   try {
@@ -73,6 +74,58 @@ export const getAnalytics = async (req, res) => {
       averageFitScore,
       departmentData,
       topSkills,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+export const getDashboardStats = async (req, res) => {
+  try {
+    const [
+      employees,
+      policies,
+      leaves,
+      totalGoals,
+      completedGoals,
+      inProgressGoals,
+      overdueGoals,
+    ] = await Promise.all([
+      Employee.countDocuments(),
+      Policy.countDocuments(),
+      LeaveRequest.countDocuments(),
+
+      Goal.countDocuments(),
+
+      Goal.countDocuments({
+        status: "Completed",
+      }),
+
+      Goal.countDocuments({
+        status: "In Progress",
+      }),
+
+      Goal.countDocuments({
+        status: {
+          $ne: "Completed",
+        },
+
+        dueDate: {
+          $lt: new Date(),
+        },
+      }),
+    ]);
+
+    res.json({
+      employees,
+      policies,
+      leaves,
+
+      totalGoals,
+      completedGoals,
+      inProgressGoals,
+      overdueGoals,
     });
   } catch (error) {
     res.status(500).json({

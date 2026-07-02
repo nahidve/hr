@@ -31,6 +31,7 @@ export default function Dashboard() {
   const [employees, setEmployees] = useState([]);
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [analytics, setAnalytics] = useState(null);
+  const [goals, setGoals] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -43,16 +44,20 @@ export default function Dashboard() {
         employeesResponse,
         leaveResponse,
         analyticsResponse,
+        goalsResponse,
       ] = await Promise.all([
         api.get("/dashboard/stats"),
         api.get("/onboarding"),
         api.get("/leave/recent"),
         api.get("/dashboard/analytics"),
+        api.get("/goals"),
       ]);
+
       setStats(statsResponse.data);
       setEmployees(employeesResponse.data.slice(0, 5));
       setLeaveRequests(leaveResponse.data);
       setAnalytics(analyticsResponse.data);
+      setGoals(goalsResponse.data.slice(0, 5));
     } catch (error) {
       console.error(error);
     }
@@ -67,9 +72,47 @@ export default function Dashboard() {
   }
 
   const cardData = [
-    { title: "Total Employees", value: stats.employees, icon: Users },
-    { title: "Policies", value: stats.policies, icon: FileText },
-    { title: "Leave Requests", value: stats.leaves, icon: Calendar },
+    {
+      title: "Employees",
+      value: stats.employees,
+      icon: Users,
+    },
+
+    {
+      title: "Policies",
+      value: stats.policies,
+      icon: FileText,
+    },
+
+    {
+      title: "Leaves",
+      value: stats.leaves,
+      icon: Calendar,
+    },
+
+    {
+      title: "Goals",
+      value: stats.totalGoals || 0,
+      icon: ArrowRight,
+    },
+
+    {
+      title: "Completed Goals",
+      value: stats.completedGoals || 0,
+      icon: ArrowRight,
+    },
+
+    {
+      title: "In Progress",
+      value: stats.inProgressGoals || 0,
+      icon: Clock,
+    },
+
+    {
+      title: "Overdue",
+      value: stats.overdueGoals || 0,
+      icon: Clock,
+    },
   ];
 
   return (
@@ -102,7 +145,7 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="mb-8 grid gap-4 md:grid-cols-3"
+          className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4"
         >
           {cardData.map((item, index) => (
             <motion.div
@@ -228,6 +271,61 @@ export default function Dashboard() {
                         {leave.recommendation || "Pending"}
                       </span>
                     </motion.div>
+                  ))}
+                </div>
+              )}
+            </MovingBorder>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <MovingBorder className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-sm font-semibold text-slate-900">
+                  Recent Goals
+                </h2>
+              </div>
+
+              {goals.length === 0 ? (
+                <p className="text-sm text-slate-400">No goals found.</p>
+              ) : (
+                <div className="space-y-3">
+                  {goals.map((goal) => (
+                    <div
+                      key={goal._id}
+                      className="flex items-center justify-between border-b border-slate-100 pb-3 last:border-0"
+                    >
+                      <div>
+                        <p className="text-sm font-medium text-slate-900">
+                          {goal.title}
+                        </p>
+
+                        <p className="text-xs text-slate-400">
+                          {goal.employeeId?.name}
+                        </p>
+                      </div>
+
+                      <div className="text-right">
+                        <p className="text-sm font-semibold">
+                          {goal.progress}%
+                        </p>
+
+                        <span
+                          className={`rounded-full px-2 py-1 text-xs ${
+                            goal.status === "Completed"
+                              ? "bg-green-100 text-green-700"
+                              : goal.status === "In Progress"
+                                ? "bg-blue-100 text-blue-700"
+                                : "bg-slate-100 text-slate-700"
+                          }`}
+                        >
+                          {goal.status}
+                        </span>
+                      </div>
+                    </div>
                   ))}
                 </div>
               )}

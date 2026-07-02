@@ -140,8 +140,31 @@ export default function Goals() {
                 }
                 className="w-full"
               />
+              <div className="mt-2 flex items-center justify-between">
+                <p className="text-sm font-medium">{goal.progress}%</p>
 
-              <p className="mt-2 text-sm">{goal.progress}%</p>
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-medium ${
+                    goal.status === "Completed"
+                      ? "bg-green-100 text-green-700"
+                      : goal.status === "In Progress"
+                        ? "bg-blue-100 text-blue-700"
+                        : "bg-slate-100 text-slate-700"
+                  }`}
+                >
+                  {goal.status}
+                </span>
+              </div>{" "}
+              <button
+                onClick={async () => {
+                  await api.delete(`/goals/${goal._id}`);
+
+                  loadData();
+                }}
+                className="mt-4 rounded-lg bg-red-500 px-4 py-2 text-sm text-white"
+              >
+                Delete Goal
+              </button>
             </div>
           </div>
         ))}
