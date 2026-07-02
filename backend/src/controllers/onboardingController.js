@@ -33,9 +33,7 @@ ${resumeText}
     const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
 
     if (!jsonMatch) {
-      throw new Error(
-        `Invalid AI response: ${aiResponse}`
-      );
+      throw new Error(`Invalid AI response: ${aiResponse}`);
     }
 
     const parsed = JSON.parse(jsonMatch[0]);
@@ -45,8 +43,7 @@ ${resumeText}
       email,
       department,
       skills: parsed.skills || [],
-      experienceSummary:
-        parsed.experienceSummary || "",
+      experienceSummary: parsed.experienceSummary || "",
       resumeText,
     });
 
@@ -70,6 +67,24 @@ export const getEmployees = async (req, res) => {
   } catch (error) {
     console.error("Get Employees Error:", error);
 
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+export const getEmployeeById = async (req, res) => {
+  try {
+    const employee = await Employee.findById(req.params.id);
+
+    if (!employee) {
+      return res.status(404).json({
+        message: "Employee not found",
+      });
+    }
+
+    res.json(employee);
+  } catch (error) {
     res.status(500).json({
       error: error.message,
     });

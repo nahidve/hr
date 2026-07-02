@@ -5,6 +5,7 @@ import Onboarding from "./pages/Onboarding";
 import PolicyAssistant from "./pages/PolicyAssistant";
 import LeaveRecommendation from "./pages/LeaveRecommendation";
 import EmployeeDirectory from "./pages/EmployeeDirectory";
+import EmployeeDetails from "./pages/EmployeeDetails";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/policy" element={<PolicyAssistant />} />
         <Route path="/leave" element={<LeaveRecommendation />} />
         <Route path="/employees" element={<EmployeeDirectory />} />
+        <Route path="/employees/:id" element={<EmployeeDetails />} />
       </Routes>
     </BrowserRouter>
   );
