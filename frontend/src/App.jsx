@@ -8,6 +8,7 @@ import EmployeeDirectory from "./pages/EmployeeDirectory";
 import EmployeeDetails from "./pages/EmployeeDetails";
 import Policies from "./pages/Policies";
 import JobDescriptionGenerator from "./pages/JobDescriptionGenerator";
+import InterviewGenerator from "./pages/InterviewGenerator";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/employees/:id" element={<EmployeeDetails />} />
         <Route path="/policies" element={<Policies />} />
         <Route path="/job-descriptions" element={<JobDescriptionGenerator />} />
+        <Route path="/interviews" element={<InterviewGenerator />} />
       </Routes>
     </BrowserRouter>
   );

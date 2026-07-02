@@ -43,6 +43,11 @@ export default function Navbar() {
       icon: Briefcase,
     },
     {
+      label: "Interviews",
+      path: "/interviews",
+      icon: Users,
+    },
+    {
       label: "Leave AI",
       path: "/leave",
       icon: Calendar,

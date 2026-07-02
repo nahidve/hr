@@ -8,6 +8,7 @@ import policyRoutes from "./routes/policyRoutes.js";
 import leaveRoutes from "./routes/leaveRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import jobDescriptionRoutes from "./routes/jobDescriptionRoutes.js";
+import interviewRoutes from "./routes/interviewRoutes.js";
 
 const app = express();
 
@@ -60,5 +61,6 @@ app.use("/api/policies", policyRoutes);
 app.use("/api/leave", leaveRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/job-descriptions", jobDescriptionRoutes);
+app.use("/api/interviews", interviewRoutes);
 
 export default app;
