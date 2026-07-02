@@ -1,6 +1,7 @@
 import Employee from "../models/Employee.js";
 import { extractText } from "../services/pdfService.js";
 import { askAI } from "../services/groqService.js";
+import { DEPARTMENT_BENCHMARKS } from "../config/departmentBenchmarks.js";
 
 export const onboardEmployee = async (req, res) => {
   try {
@@ -38,13 +39,41 @@ ${resumeText}
 
     const parsed = JSON.parse(jsonMatch[0]);
 
+    const candidateSkills = parsed.skills || [];
+
+    const benchmark = DEPARTMENT_BENCHMARKS[department] || [];
+
+    const matchedSkills = benchmark.filter((skill) =>
+      candidateSkills.some((candidateSkill) =>
+        candidateSkill.toLowerCase().includes(skill.toLowerCase()),
+      ),
+    );
+
+    const missingSkills = benchmark.filter(
+      (skill) => !matchedSkills.includes(skill),
+    );
+
+    const fitScore =
+      benchmark.length === 0
+        ? 0
+        : Math.round((matchedSkills.length / benchmark.length) * 100);
+
     const employee = await Employee.create({
       name,
       email,
       department,
-      skills: parsed.skills || [],
+
+      skills: candidateSkills,
+
       experienceSummary: parsed.experienceSummary || "",
+
       resumeText,
+
+      fitScore,
+
+      matchedSkills,
+
+      missingSkills,
     });
 
     res.status(201).json(employee);

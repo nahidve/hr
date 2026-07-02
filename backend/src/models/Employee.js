@@ -11,13 +11,25 @@ const employeeSchema = new mongoose.Schema(
     experienceSummary: String,
 
     resumeText: String,
+
+    fitScore: {
+      type: Number,
+      default: 0,
+    },
+
+    matchedSkills: {
+      type: [String],
+      default: [],
+    },
+
+    missingSkills: {
+      type: [String],
+      default: [],
+    },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-export default mongoose.model(
-  "Employee",
-  employeeSchema
-);
+export default mongoose.model("Employee", employeeSchema);

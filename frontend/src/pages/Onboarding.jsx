@@ -125,49 +125,133 @@ export default function Onboarding() {
 
         {/* Success Result */}
         <AnimatePresence>
-          {employee && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50/50 p-6 shadow-sm backdrop-blur-sm"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <CheckCircle className="h-5 w-5 text-emerald-600" />
-                <h2 className="text-lg font-semibold text-slate-900">Employee Created</h2>
-              </div>
+  {employee && (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3 }}
+      className="mt-6 rounded-xl border border-emerald-200 bg-white p-6 shadow-sm"
+    >
+      <div className="mb-4 flex items-center gap-3">
+        <CheckCircle className="h-5 w-5 text-emerald-600" />
+        <h2 className="text-lg font-semibold text-slate-900">
+          Employee Created
+        </h2>
+      </div>
 
-              <div className="space-y-3">
-                <div>
-                  <p className="text-sm font-medium text-slate-700">{employee.name}</p>
-                  <p className="text-sm text-slate-500">{employee.email}</p>
-                  <p className="text-sm text-slate-500">{employee.department}</p>
-                </div>
+      <div className="space-y-6">
+        <div>
+          <p className="text-lg font-semibold text-slate-900">
+            {employee.name}
+          </p>
 
-                {employee.skills?.length > 0 && (
-                  <div>
-                    <p className="mb-1.5 text-xs font-medium text-slate-500">Skills</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {employee.skills.map((skill, i) => (
-                        <span key={i} className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs text-slate-700">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
+          <p className="text-sm text-slate-500">
+            {employee.email}
+          </p>
 
-                {employee.experienceSummary && (
-                  <div>
-                    <p className="mb-1.5 text-xs font-medium text-slate-500">Experience Summary</p>
-                    <p className="text-sm text-slate-700">{employee.experienceSummary}</p>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          <p className="text-sm text-slate-500">
+            {employee.department}
+          </p>
+        </div>
+
+        {/* Fit Score */}
+        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <p className="text-sm text-slate-500">
+            Candidate Fit Score
+          </p>
+
+          <p className="mt-1 text-3xl font-bold text-slate-900">
+            {employee.fitScore ?? 0}%
+          </p>
+        </div>
+
+        {/* Skills */}
+        {employee.skills?.length > 0 && (
+          <div>
+            <p className="mb-2 text-sm font-medium text-slate-700">
+              Skills
+            </p>
+
+            <div className="flex flex-wrap gap-2">
+              {employee.skills.map(
+                (skill, index) => (
+                  <span
+                    key={index}
+                    className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-700"
+                  >
+                    {skill}
+                  </span>
+                )
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Matched Skills */}
+        {employee.matchedSkills?.length >
+          0 && (
+          <div>
+            <p className="mb-2 text-sm font-medium text-green-700">
+              Matched Skills
+            </p>
+
+            <div className="flex flex-wrap gap-2">
+              {employee.matchedSkills.map(
+                (skill) => (
+                  <span
+                    key={skill}
+                    className="rounded-full bg-green-100 px-3 py-1 text-xs text-green-700"
+                  >
+                    {skill}
+                  </span>
+                )
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Missing Skills */}
+        {employee.missingSkills?.length >
+          0 && (
+          <div>
+            <p className="mb-2 text-sm font-medium text-red-700">
+              Missing Skills
+            </p>
+
+            <div className="flex flex-wrap gap-2">
+              {employee.missingSkills.map(
+                (skill) => (
+                  <span
+                    key={skill}
+                    className="rounded-full bg-red-100 px-3 py-1 text-xs text-red-700"
+                  >
+                    {skill}
+                  </span>
+                )
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Experience */}
+        {employee.experienceSummary && (
+          <div>
+            <p className="mb-2 text-sm font-medium text-slate-700">
+              Experience Summary
+            </p>
+
+            <p className="text-sm leading-relaxed text-slate-600">
+              {
+                employee.experienceSummary
+              }
+            </p>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
 
         {/* Empty State */}
         {!employee && (
