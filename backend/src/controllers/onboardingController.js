@@ -18,17 +18,31 @@ export const onboardEmployee = async (req, res) => {
     const prompt = `
 Extract skills and experience summary from the resume.
 
+Also recommend the best department.
+
+Departments:
+
+Engineering:
+JavaScript, React, Node.js, MongoDB, Git
+
+HR:
+Recruitment, Employee Relations, Communication, HRMS
+
+Marketing:
+SEO, Content Marketing, Analytics, Social Media
+
 Return ONLY valid JSON.
 
 {
-  "skills": ["skill1", "skill2"],
-  "experienceSummary": "summary"
+  "skills": [],
+  "experienceSummary": "",
+  "recommendedDepartment": "",
+  "departmentReason": ""
 }
 
 Resume:
 ${resumeText}
 `;
-
     const aiResponse = await askAI(prompt, true);
 
     const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
@@ -62,17 +76,15 @@ ${resumeText}
       name,
       email,
       department,
-
       skills: candidateSkills,
 
       experienceSummary: parsed.experienceSummary || "",
+      recommendedDepartment: parsed.recommendedDepartment || "",
+      departmentReason: parsed.departmentReason || "",
 
       resumeText,
-
       fitScore,
-
       matchedSkills,
-
       missingSkills,
     });
 

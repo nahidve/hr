@@ -5,11 +5,8 @@ const employeeSchema = new mongoose.Schema(
     name: String,
     email: String,
     department: String,
-
     skills: [String],
-
     experienceSummary: String,
-
     resumeText: String,
 
     fitScore: {
@@ -26,7 +23,18 @@ const employeeSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+
+    recommendedDepartment: {
+      type: String,
+      default: "",
+    },
+
+    departmentReason: {
+      type: String,
+      default: "",
+    },
   },
+
   {
     timestamps: true,
   },
