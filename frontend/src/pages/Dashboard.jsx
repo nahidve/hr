@@ -1,8 +1,6 @@
 // src/pages/Dashboard.jsx
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import api from "../services/api";
-import StatCard from "../components/StatCard";
 import { Link } from "react-router-dom";
 import {
   Users,
@@ -12,9 +10,6 @@ import {
   Clock,
   ChevronRight,
 } from "lucide-react";
-import { AnimatedGrid } from "../components/ui/animated-grid";
-import { ShimmerButton } from "../components/ui/shimmer-button";
-import { MovingBorder } from "../components/ui/moving-border";
 import {
   PieChart,
   Pie,
@@ -66,323 +61,331 @@ export default function Dashboard() {
 
   if (!stats) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-300 border-t-slate-600" />
+      <div className="flex min-h-screen items-center justify-center bg-canvas">
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-hairline border-t-primary" />
       </div>
     );
   }
 
   const cardData = [
-    {
-      title: "Employees",
-      value: stats.employees,
-      icon: Users,
-    },
-
-    {
-      title: "Policies",
-      value: stats.policies,
-      icon: FileText,
-    },
-
-    {
-      title: "Leaves",
-      value: stats.leaves,
-      icon: Calendar,
-    },
-
-    {
-      title: "Goals",
-      value: stats.totalGoals || 0,
-      icon: ArrowRight,
-    },
-
-    {
-      title: "Completed Goals",
-      value: stats.completedGoals || 0,
-      icon: ArrowRight,
-    },
-
-    {
-      title: "In Progress",
-      value: stats.inProgressGoals || 0,
-      icon: Clock,
-    },
-
-    {
-      title: "Overdue",
-      value: stats.overdueGoals || 0,
-      icon: Clock,
-    },
+    { title: "Employees", value: stats.employees, icon: Users },
+    { title: "Policies", value: stats.policies, icon: FileText },
+    { title: "Leaves", value: stats.leaves, icon: Calendar },
+    { title: "Goals", value: stats.totalGoals || 0, icon: ArrowRight },
+    { title: "Completed Goals", value: stats.completedGoals || 0, icon: ArrowRight },
+    { title: "In Progress", value: stats.inProgressGoals || 0, icon: Clock },
+    { title: "Overdue", value: stats.overdueGoals || 0, icon: Clock },
   ];
 
+  const COLORS = ["#003c33", "#ff7759", "#1863dc", "#75758a", "#17171c", "#eeece7"];
+
   return (
-    <div className="min-h-screen bg-slate-50">
-      <AnimatedGrid className="opacity-20" />
-
-      <div className="relative mx-auto max-w-7xl px-4 py-8 md:px-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-canvas">
+      {/* Editorial space / Hero Header */}
+      <div className="border-b border-hairline bg-canvas py-12">
+        <div className="mx-auto max-w-7xl px-6 md:px-8">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-semibold text-slate-900">
-                Dashboard
+              <p className="font-mono text-xs uppercase tracking-wider text-coral font-medium mb-2">System Overview</p>
+              <h1 className="font-display text-4xl font-bold tracking-tight text-primary md:text-5xl uppercase">
+                Enterprise Cockpit
               </h1>
-              <p className="text-sm text-slate-500">HR analytics overview</p>
+              <p className="font-body text-slate text-sm mt-1">
+                Real-time workforce deployment and policy compliance telemetry.
+              </p>
             </div>
-            <ShimmerButton className="px-4 py-2 text-sm bg-slate-900 text-white hover:bg-slate-800 transition-colors rounded-lg">
-              <Clock className="mr-2 h-4 w-4" />
-              Last 30 days
-            </ShimmerButton>
+            <div>
+              <span className="inline-flex items-center gap-2 border border-hairline bg-soft-stone px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-primary rounded-xs">
+                <Clock className="h-3 w-3 text-slate" /> Last 30 Days
+              </span>
+            </div>
           </div>
-        </motion.div>
+        </div>
+      </div>
 
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
-          className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4"
-        >
-          {cardData.map((item, index) => (
-            <motion.div
+      {/* Main Grid Content */}
+      <div className="mx-auto max-w-7xl px-6 py-12 md:px-8">
+        {/* Key Metrics Grid */}
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 mb-12">
+          {cardData.map((item) => (
+            <div
               key={item.title}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + index * 0.05 }}
-              className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+              className="border border-hairline bg-canvas p-5 rounded-sm hover:border-slate transition-colors flex flex-col justify-between"
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-slate-500">
-                    {item.title}
-                  </p>
-                  <p className="mt-1 text-3xl font-semibold text-slate-900">
-                    {item.value}
-                  </p>
-                </div>
-                <div className="rounded-lg bg-slate-100 p-3">
-                  <item.icon className="h-5 w-5 text-slate-600" />
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Two Column */}
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Recent Employees */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <MovingBorder className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-sm font-semibold text-slate-900">
-                  Recent Employees
-                </h2>
-                <button className="text-sm text-slate-400 hover:text-slate-600 transition-colors flex items-center">
-                  View all <ChevronRight className="ml-1 h-4 w-4" />
-                </button>
-              </div>
-
-              {employees.length === 0 ? (
-                <p className="text-sm text-slate-400">No employees found.</p>
-              ) : (
-                <div className="space-y-3">
-                  {employees.map((emp, index) => (
-                    <motion.div
-                      key={emp._id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.3 + index * 0.03 }}
-                      className="flex items-center justify-between border-b border-slate-100 pb-3 last:border-0 last:pb-0"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-sm font-medium text-slate-700">
-                          {emp.name?.charAt(0) || "?"}
-                        </div>
-                        <div>
-                          <Link
-                            to={`/employees/${emp._id}`}
-                            className="text-sm font-medium text-slate-900 hover:text-slate-700 hover:underline"
-                          >
-                            {emp.name}
-                          </Link>
-                          <p className="text-xs text-slate-400">{emp.email}</p>
-                        </div>
-                      </div>
-                      <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs text-slate-600">
-                        {emp.department || "General"}
-                      </span>
-                    </motion.div>
-                  ))}
-                </div>
-              )}
-            </MovingBorder>
-          </motion.div>
-
-          {/* Leave Requests */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
-          >
-            <MovingBorder className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-sm font-semibold text-slate-900">
-                  Leave Requests
-                </h2>
-                <button className="text-sm text-slate-400 hover:text-slate-600 transition-colors flex items-center">
-                  View all <ChevronRight className="ml-1 h-4 w-4" />
-                </button>
-              </div>
-
-              {leaveRequests.length === 0 ? (
-                <p className="text-sm text-slate-400">
-                  No leave requests found.
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-slate mb-1">
+                  {item.title}
                 </p>
-              ) : (
-                <div className="space-y-3">
-                  {leaveRequests.map((leave, index) => (
-                    <motion.div
-                      key={leave._id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.3 + index * 0.03 }}
-                      className="flex items-center justify-between border-b border-slate-100 pb-3 last:border-0 last:pb-0"
-                    >
-                      <div>
-                        <p className="text-sm font-medium text-slate-900">
-                          {leave.employeeId?.name || "Unknown"}
-                        </p>
-                        <p className="text-xs text-slate-400">
-                          {leave.reason || "No reason"}
-                        </p>
-                      </div>
-                      <span
-                        className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                          leave.recommendation === "Approve"
-                            ? "bg-emerald-50 text-emerald-700"
-                            : "bg-red-50 text-red-700"
-                        }`}
-                      >
-                        {leave.recommendation || "Pending"}
-                      </span>
-                    </motion.div>
-                  ))}
-                </div>
-              )}
-            </MovingBorder>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <MovingBorder className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-sm font-semibold text-slate-900">
-                  Recent Goals
-                </h2>
+                <p className="font-display text-2xl font-bold tracking-tight text-primary">
+                  {item.value}
+                </p>
               </div>
+              <div className="mt-4 flex items-center justify-end text-slate">
+                <item.icon className="h-4 w-4 opacity-60" />
+              </div>
+            </div>
+          ))}
+        </div>
 
-              {goals.length === 0 ? (
-                <p className="text-sm text-slate-400">No goals found.</p>
-              ) : (
-                <div className="space-y-3">
-                  {goals.map((goal) => (
-                    <div
-                      key={goal._id}
-                      className="flex items-center justify-between border-b border-slate-100 pb-3 last:border-0"
-                    >
-                      <div>
-                        <p className="text-sm font-medium text-slate-900">
-                          {goal.title}
-                        </p>
+        {/* Dash Grid */}
+        <div className="grid gap-8 lg:grid-cols-12">
+          {/* Left Column: Activity & Lists (8 columns) */}
+          <div className="lg:col-span-8 space-y-8">
+            {/* Recent Employees & Leaves grid */}
+            <div className="grid gap-6 md:grid-cols-2">
+              {/* Recent Employees */}
+              <div className="border border-hairline bg-canvas p-6 rounded-sm">
+                <div className="flex items-center justify-between mb-6 pb-2 border-b border-hairline">
+                  <h2 className="font-mono text-xs uppercase tracking-wider text-primary font-bold">
+                    Recent Employees
+                  </h2>
+                  <Link
+                    to="/employees"
+                    className="font-mono text-[11px] uppercase tracking-wider text-action-blue hover:underline flex items-center gap-1"
+                  >
+                    View all <ChevronRight className="h-3 w-3" />
+                  </Link>
+                </div>
 
-                        <p className="text-xs text-slate-400">
-                          {goal.employeeId?.name}
-                        </p>
-                      </div>
-
-                      <div className="text-right">
-                        <p className="text-sm font-semibold">
-                          {goal.progress}%
-                        </p>
-
-                        <span
-                          className={`rounded-full px-2 py-1 text-xs ${
-                            goal.status === "Completed"
-                              ? "bg-green-100 text-green-700"
-                              : goal.status === "In Progress"
-                                ? "bg-blue-100 text-blue-700"
-                                : "bg-slate-100 text-slate-700"
-                          }`}
-                        >
-                          {goal.status}
+                {employees.length === 0 ? (
+                  <p className="font-body text-xs text-slate py-4">No employees recorded.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {employees.map((emp) => (
+                      <div
+                        key={emp._id}
+                        className="flex items-center justify-between py-1"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-soft-stone font-mono text-xs font-bold text-primary">
+                            {emp.name?.charAt(0) || "?"}
+                          </div>
+                          <div>
+                            <Link
+                              to={`/employees/${emp._id}`}
+                              className="font-body text-sm font-semibold text-primary hover:text-action-blue"
+                            >
+                              {emp.name}
+                            </Link>
+                            <p className="font-mono text-[11px] text-slate">{emp.email}</p>
+                          </div>
+                        </div>
+                        <span className="font-mono text-[10px] uppercase tracking-wider bg-soft-stone text-primary px-2 py-0.5 rounded-xs">
+                          {emp.department || "General"}
                         </span>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </MovingBorder>
-          </motion.div>
-
-          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold">Average Candidate Fit</h2>
-
-            <p className="mt-3 text-4xl font-bold">
-              {analytics?.averageFitScore}%
-            </p>
-          </div>
-
-          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-xl font-semibold">
-              Employees By Department
-            </h2>
-
-            <div className="h-80">
-              <ResponsiveContainer>
-                <PieChart>
-                  <Pie
-                    data={analytics?.departmentData || []}
-                    dataKey="value"
-                    nameKey="name"
-                  >
-                    {analytics?.departmentData?.map((entry, index) => (
-                      <Cell key={index} />
                     ))}
-                  </Pie>
+                  </div>
+                )}
+              </div>
 
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
+              {/* Leave Requests */}
+              <div className="border border-hairline bg-canvas p-6 rounded-sm">
+                <div className="flex items-center justify-between mb-6 pb-2 border-b border-hairline">
+                  <h2 className="font-mono text-xs uppercase tracking-wider text-primary font-bold">
+                    Leave Requests
+                  </h2>
+                  <Link
+                    to="/leave"
+                    className="font-mono text-[11px] uppercase tracking-wider text-action-blue hover:underline flex items-center gap-1"
+                  >
+                    View all <ChevronRight className="h-3 w-3" />
+                  </Link>
+                </div>
+
+                {leaveRequests.length === 0 ? (
+                  <p className="font-body text-xs text-slate py-4">No requests pending.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {leaveRequests.map((leave) => (
+                      <div
+                        key={leave._id}
+                        className="flex items-center justify-between py-1"
+                      >
+                        <div>
+                          <p className="font-body text-sm font-semibold text-primary">
+                            {leave.employeeId?.name || "Unknown"}
+                          </p>
+                          <p className="font-mono text-[11px] text-slate">
+                            {leave.reason || "No reason"}
+                          </p>
+                        </div>
+                        <span
+                          className={`font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-xs ${
+                            leave.recommendation === "Approve"
+                              ? "bg-pale-green text-deep-green"
+                              : "bg-coral-soft/20 text-coral"
+                          }`}
+                        >
+                          {leave.recommendation || "Pending"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Goals & Fit Scores */}
+            <div className="grid gap-6 md:grid-cols-3">
+              {/* Recent Goals (2 cols) */}
+              <div className="border border-hairline bg-canvas p-6 rounded-sm md:col-span-2">
+                <div className="flex items-center justify-between mb-6 pb-2 border-b border-hairline">
+                  <h2 className="font-mono text-xs uppercase tracking-wider text-primary font-bold">
+                    Active Goals
+                  </h2>
+                  <Link
+                    to="/goals"
+                    className="font-mono text-[11px] uppercase tracking-wider text-action-blue hover:underline"
+                  >
+                    Manage
+                  </Link>
+                </div>
+
+                {goals.length === 0 ? (
+                  <p className="font-body text-xs text-slate py-4">No goals configured.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {goals.map((goal) => (
+                      <div
+                        key={goal._id}
+                        className="flex items-center justify-between py-2 border-b border-card-border last:border-0 last:pb-0"
+                      >
+                        <div>
+                          <p className="font-body text-sm font-semibold text-primary">
+                            {goal.title}
+                          </p>
+                          <p className="font-mono text-[11px] text-slate">
+                            {goal.employeeId?.name}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-mono text-xs font-semibold text-primary">
+                            {goal.progress}%
+                          </p>
+                          <span
+                            className={`inline-block font-mono text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded-xs mt-1 ${
+                              goal.status === "Completed"
+                                ? "bg-pale-green text-deep-green"
+                                : goal.status === "In Progress"
+                                  ? "bg-pale-blue text-action-blue"
+                                  : "bg-soft-stone text-primary"
+                            }`}
+                          >
+                            {goal.status}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Fit score summary (1 col) */}
+              <div className="border border-hairline bg-deep-green text-on-dark p-6 rounded-sm flex flex-col justify-between">
+                <div>
+                  <h3 className="font-mono text-xs uppercase tracking-wider text-coral font-bold">
+                    Recruitment Fit
+                  </h3>
+                  <p className="font-body text-xs text-on-dark/70 mt-2">
+                    Average fit scoring generated from parsed candidate resumes.
+                  </p>
+                </div>
+                <div className="mt-8">
+                  <span className="font-mono text-5xl font-bold text-on-dark">
+                    {analytics?.averageFitScore || 0}%
+                  </span>
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-on-dark/50 mt-1">
+                    System-wide Average
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-xl font-semibold">Top Skills</h2>
+          {/* Right Column: Analytics & Charts (4 columns) */}
+          <div className="lg:col-span-4 space-y-6">
+            {/* Department Breakdown */}
+            <div className="border border-hairline bg-canvas p-6 rounded-sm">
+              <h2 className="font-mono text-xs uppercase tracking-wider text-primary font-bold mb-4 pb-2 border-b border-hairline">
+                Department Allocation
+              </h2>
+              <div className="h-64 flex items-center justify-center">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={analytics?.departmentData || []}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={50}
+                      outerRadius={75}
+                      paddingAngle={4}
+                    >
+                      {(analytics?.departmentData || []).map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "#ffffff",
+                        borderColor: "#d9d9dd",
+                        borderRadius: "4px",
+                        fontFamily: "Space Mono",
+                        fontSize: "12px",
+                      }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                {(analytics?.departmentData || []).slice(0, 6).map((dept, index) => (
+                  <div key={dept.name} className="flex items-center gap-2">
+                    <span
+                      className="inline-block h-2 w-2 rounded-full"
+                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                    />
+                    <span className="font-mono text-[10px] text-slate truncate">
+                      {dept.name} ({dept.value})
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-            <div className="h-80">
-              <ResponsiveContainer>
-                <BarChart data={analytics?.topSkills || []}>
-                  <XAxis dataKey="skill" />
-
-                  <YAxis />
-
-                  <Tooltip />
-
-                  <Bar dataKey="count" />
-                </BarChart>
-              </ResponsiveContainer>
+            {/* Top Skills */}
+            <div className="border border-hairline bg-canvas p-6 rounded-sm">
+              <h2 className="font-mono text-xs uppercase tracking-wider text-primary font-bold mb-4 pb-2 border-b border-hairline">
+                Skill Proliferation
+              </h2>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={analytics?.topSkills || []} margin={{ left: -20 }}>
+                    <XAxis
+                      dataKey="skill"
+                      tick={{ fill: "#75758a", fontSize: 10, fontFamily: "Space Mono" }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <YAxis
+                      tick={{ fill: "#75758a", fontSize: 10, fontFamily: "Space Mono" }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "#ffffff",
+                        borderColor: "#d9d9dd",
+                        borderRadius: "4px",
+                        fontFamily: "Space Mono",
+                        fontSize: "12px",
+                      }}
+                    />
+                    <Bar dataKey="count" fill="#003c33" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
         </div>

@@ -1,9 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import api from "../services/api";
 import { Send, Bot, User, Sparkles } from "lucide-react";
-import { MovingBorder } from "../components/ui/moving-border";
-import { ShimmerButton } from "../components/ui/shimmer-button";
 
 export default function PolicyAssistant() {
   const [question, setQuestion] = useState("");
@@ -40,98 +37,112 @@ export default function PolicyAssistant() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-8 md:px-8">
-      <div className="mx-auto max-w-3xl">
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <h1 className="text-2xl font-semibold text-slate-900">HR Policy Assistant</h1>
-          <p className="text-sm text-slate-500">Ask questions about company policies</p>
-        </motion.div>
+    <div className="min-h-screen bg-canvas">
+      {/* Header */}
+      <div className="border-b border-hairline bg-canvas py-12">
+        <div className="mx-auto max-w-3xl px-6 md:px-8">
+          <p className="font-mono text-xs uppercase tracking-wider text-coral font-medium mb-2">Internal AI Assistant</p>
+          <h1 className="font-display text-4xl font-bold tracking-tight text-primary uppercase">
+            Policy Knowledge Graph
+          </h1>
+          <p className="font-body text-slate text-sm mt-1">
+            Query the corporate knowledge base regarding employment, benefits, operations, and compliance guidelines.
+          </p>
+        </div>
+      </div>
 
-        {/* Chat Container */}
-        <MovingBorder className="rounded-xl border border-slate-200 bg-white shadow-sm">
-          <div className="flex h-[400px] flex-col">
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="mx-auto max-w-3xl px-6 py-12 md:px-8">
+        {/* Agent Console Card */}
+        <div className="bg-primary text-on-dark rounded-sm border border-cohere-black shadow-lg overflow-hidden font-mono">
+          {/* Console Header Bar */}
+          <div className="bg-cohere-black/45 border-b border-white/10 px-4 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[11px] uppercase tracking-wider text-slate font-bold">Model: Command-R+</span>
+            </div>
+            <div className="flex gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
+              <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
+              <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
+            </div>
+          </div>
+
+          {/* Chat Container */}
+          <div className="flex h-[450px] flex-col justify-between">
+            {/* Messages Area */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
               {messages.length === 0 ? (
-                <div className="flex h-full flex-col items-center justify-center text-center">
-                  <Sparkles className="h-8 w-8 text-slate-300" />
-                  <p className="mt-3 text-sm text-slate-400">Ask about leave policies, remote work, benefits, or any HR topic</p>
+                <div className="flex h-full flex-col items-center justify-center text-center space-y-3">
+                  <Sparkles className="h-6 w-6 text-coral" />
+                  <p className="text-xs uppercase tracking-wider text-slate max-w-xs">
+                    Ready for prompt input. Ask about leaves, remote policy, structure, or guidelines.
+                  </p>
                 </div>
               ) : (
-                <AnimatePresence>
+                <div className="space-y-6">
                   {messages.map((msg, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="space-y-3"
-                    >
-                      {/* User */}
+                    <div key={index} className="space-y-4">
+                      {/* User Prompt */}
                       <div className="flex justify-end">
-                        <div className="max-w-[80%] rounded-xl bg-slate-100 px-4 py-2.5">
-                          <div className="flex items-center gap-2 mb-1">
-                            <User className="h-3.5 w-3.5 text-slate-500" />
-                            <span className="text-xs font-medium text-slate-500">You</span>
+                        <div className="max-w-[85%] bg-deep-green border border-white/10 px-4 py-3 rounded-xs">
+                          <div className="flex items-center gap-1.5 mb-1 text-[10px] text-coral uppercase tracking-wider">
+                            <User className="h-3 w-3" />
+                            <span>User</span>
                           </div>
-                          <p className="text-sm text-slate-800">{msg.question}</p>
+                          <p className="font-body text-xs text-white leading-relaxed">{msg.question}</p>
                         </div>
                       </div>
 
-                      {/* Assistant */}
+                      {/* AI Agent Response */}
                       <div className="flex justify-start">
-                        <div className="max-w-[80%] rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm">
-                          <div className="flex items-center gap-2 mb-1">
-                            <Bot className="h-3.5 w-3.5 text-slate-600" />
-                            <span className="text-xs font-medium text-slate-500">HR Assistant</span>
+                        <div className="max-w-[85%] bg-white/5 border border-white/10 px-4 py-3 rounded-xs">
+                          <div className="flex items-center gap-1.5 mb-1 text-[10px] text-action-blue uppercase tracking-wider">
+                            <Bot className="h-3 w-3" />
+                            <span>Command-R+ Response</span>
                           </div>
-                          <p className="text-sm leading-relaxed text-slate-700">{msg.answer}</p>
+                          <p className="font-body text-xs text-on-dark/95 leading-relaxed whitespace-pre-line">{msg.answer}</p>
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
-                </AnimatePresence>
+                </div>
               )}
               {loading && (
                 <div className="flex justify-start">
-                  <div className="rounded-xl border border-slate-200 bg-white px-4 py-2.5">
-                    <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 animate-bounce rounded-full bg-slate-400 [animation-delay:-0.3s]" />
-                      <span className="h-2 w-2 animate-bounce rounded-full bg-slate-400 [animation-delay:-0.15s]" />
-                      <span className="h-2 w-2 animate-bounce rounded-full bg-slate-400" />
-                    </div>
+                  <div className="bg-white/5 border border-white/10 px-4 py-3 rounded-xs">
+                    <span className="inline-flex gap-1.5">
+                      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-white/40" />
+                      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-white/40 [animation-delay:0.2s]" />
+                      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-white/40 [animation-delay:0.4s]" />
+                    </span>
                   </div>
                 </div>
               )}
               <div ref={bottomRef} />
             </div>
 
-            {/* Input */}
-            <div className="border-t border-slate-200 p-3">
-              <div className="flex gap-2">
+            {/* Input Bar */}
+            <div className="bg-cohere-black/25 border-t border-white/10 p-4">
+              <div className="flex gap-2 items-center">
                 <textarea
                   rows="1"
-                  placeholder="Ask a question..."
+                  placeholder="Insert prompt here..."
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  className="flex-1 resize-none rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm outline-none transition-colors focus:border-slate-400 focus:bg-white"
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xs px-4 py-3 text-xs text-white placeholder-slate focus:outline-none focus:border-coral focus:ring-1 focus:ring-coral transition-colors resize-none font-mono"
                 />
-                <ShimmerButton
+                <button
                   onClick={askQuestion}
                   disabled={loading || !question.trim()}
-                  className="rounded-lg bg-slate-900 px-4 py-2 text-white hover:bg-slate-800 disabled:opacity-50"
+                  className="bg-white text-primary font-mono text-[10px] uppercase tracking-wider rounded-pill px-5 py-3 hover:bg-soft-stone disabled:opacity-40 transition-opacity"
                 >
-                  <Send className="h-4 w-4" />
-                </ShimmerButton>
+                  <Send className="h-3 w-3" />
+                </button>
               </div>
             </div>
           </div>
-        </MovingBorder>
+        </div>
       </div>
     </div>
   );

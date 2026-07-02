@@ -1,21 +1,20 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import api from "../services/api";
+import { ArrowLeft } from "lucide-react";
 
 export default function EmployeeDetails() {
   const { id } = useParams();
-  console.log("ID:", id);
   const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     loadEmployee();
   }, [id]);
 
   const loadEmployee = async () => {
     try {
-      console.log(`/onboarding/${id}`);
       const { data } = await api.get(`/onboarding/${id}`);
-      console.log(data);
       setEmployee(data);
     } catch (error) {
       console.error(error);
@@ -25,113 +24,163 @@ export default function EmployeeDetails() {
   };
 
   if (loading) {
-    return <div className="mx-auto max-w-6xl p-6">Loading...</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-canvas">
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-hairline border-t-primary" />
+      </div>
+    );
   }
+
   if (!employee) {
-    return <div className="mx-auto max-w-6xl p-6">Employee not found</div>;
+    return (
+      <div className="min-h-screen bg-canvas flex flex-col items-center justify-center p-6">
+        <p className="font-mono text-xs uppercase tracking-wider text-error">Employee not found</p>
+        <Link to="/employees" className="mt-4 font-mono text-xs text-action-blue uppercase tracking-wider hover:underline">
+          &larr; Return to directory
+        </Link>
+      </div>
+    );
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 p-4 md:p-6">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h1 className="text-3xl font-bold">{employee.name}</h1>
-
-        <p className="mt-2 text-slate-500">{employee.email}</p>
-
-        <span className="mt-4 inline-block rounded-full bg-slate-100 px-4 py-2 text-sm font-medium">
-          {employee.department}
-        </span>
-      </div>
-
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-xl font-semibold">Skills</h2>
-
-        <div className="flex flex-wrap gap-2">
-          {employee.skills?.map((skill, index) => (
-            <span
-              key={index}
-              className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-xl font-semibold">Experience Summary</h2>
-
-        <p className="leading-relaxed text-slate-700">
-          {employee.experienceSummary}
-        </p>
-      </div>
-
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-xl font-semibold">Resume Content</h2>
-
-        <div className="max-h-80 overflow-y-auto rounded-xl bg-slate-50 p-4 text-sm text-slate-700">
-          {employee.resumeText}
-        </div>
-      </div>
-
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-xl font-semibold">AI Recommendation</h2>
-
-        <p className="text-lg font-semibold">
-          {employee.recommendedDepartment}
-        </p>
-
-        <p className="mt-2 text-slate-600">{employee.departmentReason}</p>
-      </div>
-
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-xl font-semibold">Resume Insights</h2>
-
-        <div className="space-y-6">
-          <div>
-            <h3 className="font-medium">Suggested Role</h3>
-
-            <p className="mt-2">{employee.suggestedRole}</p>
-          </div>
-
-          <div>
-            <h3 className="font-medium">Strengths</h3>
-
-            <div className="mt-2 flex flex-wrap gap-2">
-              {employee.strengths?.map((item) => (
-                <span
-                  key={item}
-                  className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700"
-                >
-                  {item}
-                </span>
-              ))}
+    <div className="min-h-screen bg-canvas">
+      {/* Header Banner */}
+      <div className="border-b border-hairline bg-soft-stone py-12">
+        <div className="mx-auto max-w-5xl px-6 md:px-8">
+          <Link
+            to="/employees"
+            className="inline-flex items-center gap-2 font-mono text-xs text-slate uppercase tracking-wider hover:text-primary mb-6 transition-colors"
+          >
+            <ArrowLeft className="h-3 w-3" /> Back to directory
+          </Link>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h1 className="font-display text-4xl font-bold tracking-tight text-primary uppercase">
+                {employee.name}
+              </h1>
+              <p className="font-mono text-xs text-slate mt-1">{employee.email}</p>
             </div>
-          </div>
-
-          <div>
-            <h3 className="font-medium">Development Areas</h3>
-
-            <div className="mt-2 flex flex-wrap gap-2">
-              {employee.weaknesses?.map((item) => (
-                <span
-                  key={item}
-                  className="rounded-full bg-orange-100 px-3 py-1 text-sm text-orange-700"
-                >
-                  {item}
-                </span>
-              ))}
+            <div>
+              <span className="inline-block font-mono text-xs uppercase tracking-wider bg-primary text-on-primary px-3 py-1.5 rounded-pill">
+                {employee.department}
+              </span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-2 text-xl font-semibold">Profile Metadata</h2>
+      {/* Main Details Body */}
+      <div className="mx-auto max-w-5xl px-6 py-12 md:px-8 space-y-8">
+        <div className="grid gap-8 md:grid-cols-12">
+          {/* Main Info (8 cols) */}
+          <div className="md:col-span-8 space-y-8">
+            {/* Experience Summary */}
+            <div className="border-b border-hairline pb-8">
+              <h2 className="font-mono text-xs uppercase tracking-wider text-primary font-bold mb-4">
+                Professional Experience Summary
+              </h2>
+              <p className="font-body text-base text-ink leading-relaxed whitespace-pre-line">
+                {employee.experienceSummary || "No experience summary provided."}
+              </p>
+            </div>
 
-        <p className="text-slate-500">
-          Created: {new Date(employee.createdAt).toLocaleString()}
-        </p>
+            {/* Resume Content */}
+            <div className="border-b border-hairline pb-8">
+              <h2 className="font-mono text-xs uppercase tracking-wider text-primary font-bold mb-4">
+                Parsed Resume Source
+              </h2>
+              <div className="max-h-80 overflow-y-auto rounded-sm bg-soft-stone p-5 font-mono text-[11px] text-primary leading-normal whitespace-pre-wrap border border-hairline">
+                {employee.resumeText || "No resume text extracted."}
+              </div>
+            </div>
+
+            {/* Department Alignment / Reason */}
+            <div>
+              <h2 className="font-mono text-xs uppercase tracking-wider text-primary font-bold mb-4">
+                AI Alignment Reasoning
+              </h2>
+              <div className="border border-hairline p-6 rounded-sm bg-canvas">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-slate block mb-1">Recommended Department Placement</span>
+                <span className="font-display text-xl font-bold tracking-tight text-primary uppercase">
+                  {employee.recommendedDepartment || "Not Specified"}
+                </span>
+                <p className="font-body text-sm text-slate mt-3 leading-relaxed">
+                  {employee.departmentReason || "No reasoning documented by system AI."}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar Insights (4 cols) */}
+          <div className="md:col-span-4 space-y-8">
+            {/* Skills */}
+            <div className="border border-hairline p-6 rounded-sm bg-canvas">
+              <h3 className="font-mono text-xs uppercase tracking-wider text-primary font-bold mb-4 pb-2 border-b border-hairline">
+                Core Skill Tags
+              </h3>
+              <div className="flex flex-wrap gap-1.5">
+                {employee.skills?.map((skill, index) => (
+                  <span
+                    key={index}
+                    className="border border-hairline text-primary font-mono text-[10px] uppercase tracking-wider px-2 py-1 rounded-pill bg-canvas hover:border-slate transition-colors"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Resume Insights */}
+            <div className="border border-hairline p-6 rounded-sm bg-canvas space-y-6">
+              <h3 className="font-mono text-xs uppercase tracking-wider text-primary font-bold pb-2 border-b border-hairline">
+                AI Resume Metrics
+              </h3>
+
+              <div>
+                <span className="font-mono text-[10px] uppercase tracking-wider text-slate block mb-1">Suggested Role</span>
+                <p className="font-body text-sm font-semibold text-primary">{employee.suggestedRole || "General"}</p>
+              </div>
+
+              <div>
+                <span className="font-mono text-[10px] uppercase tracking-wider text-slate block mb-2">Strengths</span>
+                <div className="flex flex-wrap gap-1">
+                  {employee.strengths?.map((item) => (
+                    <span
+                      key={item}
+                      className="bg-pale-green text-deep-green font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-xs border border-deep-green/10"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <span className="font-mono text-[10px] uppercase tracking-wider text-slate block mb-2">Development Areas</span>
+                <div className="flex flex-wrap gap-1">
+                  {employee.weaknesses?.map((item) => (
+                    <span
+                      key={item}
+                      className="bg-coral-soft/10 text-coral font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-xs border border-coral-soft/20"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Profile Metadata */}
+            <div className="border border-hairline p-6 rounded-sm bg-canvas">
+              <h3 className="font-mono text-xs uppercase tracking-wider text-primary font-bold mb-3">
+                Telemetry
+              </h3>
+              <p className="font-mono text-[11px] text-slate">
+                Created: {new Date(employee.createdAt).toLocaleString()}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

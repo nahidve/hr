@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import api from "../services/api";
 import {
   Upload,
@@ -9,8 +8,6 @@ import {
   FileUp,
   CheckCircle,
 } from "lucide-react";
-import { MovingBorder } from "../components/ui/moving-border";
-import { ShimmerButton } from "../components/ui/shimmer-button";
 
 export default function Onboarding() {
   const [form, setForm] = useState({ name: "", email: "", department: "" });
@@ -24,6 +21,7 @@ export default function Onboarding() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!resume) return;
     try {
       setLoading(true);
       const formData = new FormData();
@@ -45,231 +43,221 @@ export default function Onboarding() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-8 md:px-8">
-      <div className="mx-auto max-w-3xl">
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <h1 className="text-2xl font-semibold text-slate-900">
-            Employee Onboarding
+    <div className="min-h-screen bg-canvas">
+      {/* Header */}
+      <div className="border-b border-hairline bg-canvas py-12">
+        <div className="mx-auto max-w-3xl px-6 md:px-8">
+          <p className="font-mono text-xs uppercase tracking-wider text-coral font-medium mb-2">Personnel Onboarding</p>
+          <h1 className="font-display text-4xl font-bold tracking-tight text-primary uppercase">
+            Ingest Employee
           </h1>
-          <p className="text-sm text-slate-500">
-            Add new employees to the system
+          <p className="font-body text-slate text-sm mt-1">
+            Provide profile telemetry and upload career resume (PDF format) for system parser.
           </p>
-        </motion.div>
+        </div>
+      </div>
 
-        {/* Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
-        >
-          <MovingBorder className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-            <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="mx-auto max-w-3xl px-6 py-12 md:px-8 space-y-8">
+        {/* Form Container */}
+        <div className="border border-hairline bg-canvas p-8 rounded-lg shadow-sm">
+          <h2 className="font-mono text-xs uppercase tracking-wider text-primary font-bold mb-6 pb-2 border-b border-hairline">
+            Profile Credentials
+          </h2>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="font-mono text-[10px] uppercase tracking-wider text-slate block mb-1.5">
+                Full Name
+              </label>
               <div className="relative">
-                <User className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
+                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate">
+                  <User className="h-4 w-4 opacity-60" />
+                </span>
                 <input
                   name="name"
-                  placeholder="Full Name"
+                  type="text"
+                  placeholder="e.g. John Doe"
                   value={form.name}
                   onChange={handleChange}
                   required
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-3 text-sm outline-none transition-colors focus:border-slate-400 focus:bg-white"
+                  className="w-full pl-10 pr-4 py-3 rounded-xs border border-hairline bg-canvas font-body text-sm text-primary placeholder-slate focus:outline-none focus:border-form-focus focus:ring-1 focus:ring-form-focus transition-colors"
                 />
               </div>
+            </div>
 
+            <div>
+              <label className="font-mono text-[10px] uppercase tracking-wider text-slate block mb-1.5">
+                Email Address
+              </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
+                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate">
+                  <Mail className="h-4 w-4 opacity-60" />
+                </span>
                 <input
                   name="email"
                   type="email"
-                  placeholder="Email Address"
+                  placeholder="e.g. email@company.com"
                   value={form.email}
                   onChange={handleChange}
                   required
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-3 text-sm outline-none transition-colors focus:border-slate-400 focus:bg-white"
+                  className="w-full pl-10 pr-4 py-3 rounded-xs border border-hairline bg-canvas font-body text-sm text-primary placeholder-slate focus:outline-none focus:border-form-focus focus:ring-1 focus:ring-form-focus transition-colors"
                 />
               </div>
+            </div>
 
+            <div>
+              <label className="font-mono text-[10px] uppercase tracking-wider text-slate block mb-1.5">
+                Target Department
+              </label>
               <div className="relative">
-                <Building2 className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
+                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate">
+                  <Building2 className="h-4 w-4 opacity-60" />
+                </span>
                 <input
                   name="department"
-                  placeholder="Department"
+                  type="text"
+                  placeholder="e.g. Engineering"
                   value={form.department}
                   onChange={handleChange}
                   required
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-3 text-sm outline-none transition-colors focus:border-slate-400 focus:bg-white"
+                  className="w-full pl-10 pr-4 py-3 rounded-xs border border-hairline bg-canvas font-body text-sm text-primary placeholder-slate focus:outline-none focus:border-form-focus focus:ring-1 focus:ring-form-focus transition-colors"
                 />
               </div>
+            </div>
 
+            <div>
+              <label className="font-mono text-[10px] uppercase tracking-wider text-slate block mb-1.5">
+                Resume Document (PDF)
+              </label>
               <div className="relative">
-                <FileUp className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
+                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate">
+                  <FileUp className="h-4 w-4 opacity-60" />
+                </span>
                 <input
                   type="file"
                   accept=".pdf"
                   onChange={(e) => setResume(e.target.files[0])}
                   required
-                  className="w-full cursor-pointer rounded-lg border border-slate-200 bg-slate-50/50 pl-10 pr-4 py-2.5 text-sm text-slate-500 outline-none transition-colors file:mr-4 file:rounded-md file:border-0 file:bg-slate-100 file:px-4 file:py-2 file:text-sm file:text-slate-700 hover:file:bg-slate-200 focus:border-slate-400 focus:bg-white"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xs border border-hairline bg-canvas font-mono text-xs text-primary file:mr-4 file:rounded-xs file:border-0 file:bg-soft-stone file:px-3 file:py-1.5 file:text-xs file:font-mono file:uppercase file:tracking-wider file:text-primary file:cursor-pointer hover:file:bg-hairline focus:outline-none focus:border-form-focus transition-colors"
                 />
               </div>
+            </div>
 
-              <ShimmerButton
-                type="submit"
-                disabled={loading}
-                className="w-full justify-center rounded-lg bg-slate-900 py-3 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50"
-              >
-                {loading ? (
-                  <span className="flex items-center gap-2">
-                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    Processing...
-                  </span>
-                ) : (
-                  "Create Employee"
-                )}
-              </ShimmerButton>
-            </form>
-          </MovingBorder>
-        </motion.div>
-
-        {/* Success Result */}
-        <AnimatePresence>
-          {employee && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="mt-6 rounded-xl border border-emerald-200 bg-white p-6 shadow-sm"
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-primary text-on-primary font-mono text-xs uppercase tracking-wider rounded-pill py-3 hover:bg-cohere-black transition-colors disabled:opacity-50"
             >
-              <div className="mb-4 flex items-center gap-3">
-                <CheckCircle className="h-5 w-5 text-emerald-600" />
-                <h2 className="text-lg font-semibold text-slate-900">
-                  Employee Created
-                </h2>
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-on-primary border-t-transparent" />
+                  Processing Resume...
+                </span>
+              ) : (
+                "Upload & Onboard"
+              )}
+            </button>
+          </form>
+        </div>
+
+        {/* Success Result Panel */}
+        {employee && (
+          <div className="border border-hairline bg-canvas p-8 rounded-sm space-y-6">
+            <div className="flex items-center gap-2.5 pb-4 border-b border-hairline">
+              <CheckCircle className="h-5 w-5 text-deep-green" />
+              <h2 className="font-mono text-xs uppercase tracking-wider text-primary font-bold">
+                Telemetry Output: Employee Record Created
+              </h2>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <p className="font-display text-2xl font-bold tracking-tight text-primary uppercase">
+                  {employee.name}
+                </p>
+                <p className="font-mono text-xs text-slate mt-1">{employee.email}</p>
+                <span className="inline-block mt-3 font-mono text-[10px] uppercase tracking-wider bg-soft-stone text-primary px-2 py-0.5 rounded-xs">
+                  {employee.department}
+                </span>
               </div>
 
-              <div className="space-y-6">
-                <div>
-                  <p className="text-lg font-semibold text-slate-900">
-                    {employee.name}
-                  </p>
+              <div className="border border-hairline p-4 rounded-sm bg-soft-stone/30">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-slate block mb-1">
+                  System Candidate Fit Score
+                </span>
+                <span className="font-mono text-4xl font-bold text-primary">
+                  {employee.fitScore ?? 0}%
+                </span>
+              </div>
+            </div>
 
-                  <p className="text-sm text-slate-500">{employee.email}</p>
+            {/* AI recommendation */}
+            <div className="border border-hairline bg-pale-blue/30 p-5 rounded-sm">
+              <h3 className="font-mono text-xs uppercase tracking-wider text-action-blue font-bold mb-2">
+                AI Alignment Placement Recommendation
+              </h3>
+              <p className="font-body text-sm font-semibold text-primary">
+                {employee.recommendedDepartment}
+              </p>
+              <p className="font-body text-xs text-slate mt-2 leading-relaxed">
+                {employee.departmentReason}
+              </p>
+            </div>
 
-                  <p className="text-sm text-slate-500">
-                    {employee.department}
-                  </p>
-                </div>
+            {/* Suggested role details */}
+            {employee.suggestedRole && (
+              <div className="border border-hairline p-5 rounded-sm">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-slate block mb-1">
+                  Suggested Corporate Role
+                </span>
+                <p className="font-body text-sm font-semibold text-primary">{employee.suggestedRole}</p>
+              </div>
+            )}
 
-                {/* Fit Score */}
-                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm text-slate-500">Candidate Fit Score</p>
-
-                  <p className="mt-1 text-3xl font-bold text-slate-900">
-                    {employee.fitScore ?? 0}%
-                  </p>
-                </div>
-
-                {/* Skills */}
-                {employee.skills?.length > 0 && (
-                  <div>
-                    <p className="mb-2 text-sm font-medium text-slate-700">
-                      Skills
-                    </p>
-
-                    <div className="flex flex-wrap gap-2">
-                      {employee.skills.map((skill, index) => (
-                        <span
-                          key={index}
-                          className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-700"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Matched Skills */}
-                {employee.matchedSkills?.length > 0 && (
-                  <div>
-                    <p className="mb-2 text-sm font-medium text-green-700">
-                      Matched Skills
-                    </p>
-
-                    <div className="flex flex-wrap gap-2">
-                      {employee.matchedSkills.map((skill) => (
-                        <span
-                          key={skill}
-                          className="rounded-full bg-green-100 px-3 py-1 text-xs text-green-700"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Missing Skills */}
-                {employee.missingSkills?.length > 0 && (
-                  <div>
-                    <p className="mb-2 text-sm font-medium text-red-700">
-                      Missing Skills
-                    </p>
-
-                    <div className="flex flex-wrap gap-2">
-                      {employee.missingSkills.map((skill) => (
-                        <span
-                          key={skill}
-                          className="rounded-full bg-red-100 px-3 py-1 text-xs text-red-700"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Experience */}
-                {employee.experienceSummary && (
-                  <div>
-                    <p className="mb-2 text-sm font-medium text-slate-700">
-                      Experience Summary
-                    </p>
-
-                    <p className="text-sm leading-relaxed text-slate-600">
-                      {employee.experienceSummary}
-                    </p>
-                  </div>
-                )}
-                <div className="rounded-xl border border-blue-200 bg-blue-50 p-4">
-                  <h3 className="font-semibold text-blue-900">
-                    AI Department Recommendation
-                  </h3>
-
-                  <p className="mt-2 text-lg font-bold text-blue-700">
-                    {employee.recommendedDepartment}
-                  </p>
-
-                  <p className="mt-2 text-sm text-blue-800">
-                    {employee.departmentReason}
-                  </p>
+            {/* Skills categorizations */}
+            <div className="grid gap-4 md:grid-cols-3">
+              <div>
+                <h4 className="font-mono text-[10px] uppercase tracking-wider text-slate mb-2">Identified Skills</h4>
+                <div className="flex flex-wrap gap-1">
+                  {employee.skills?.map((skill, index) => (
+                    <span key={index} className="font-mono text-[9px] uppercase tracking-wider border border-hairline px-1.5 py-0.5 rounded-xs bg-canvas text-primary">
+                      {skill}
+                    </span>
+                  ))}
                 </div>
               </div>
 
-              {/* Strengths */}
+              <div>
+                <h4 className="font-mono text-[10px] uppercase tracking-wider text-deep-green mb-2">Matched Competencies</h4>
+                <div className="flex flex-wrap gap-1">
+                  {employee.matchedSkills?.map((skill) => (
+                    <span key={skill} className="font-mono text-[9px] uppercase tracking-wider bg-pale-green text-deep-green px-1.5 py-0.5 rounded-xs">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-mono text-[10px] uppercase tracking-wider text-coral mb-2">Development Areas</h4>
+                <div className="flex flex-wrap gap-1">
+                  {employee.missingSkills?.map((skill) => (
+                    <span key={skill} className="font-mono text-[9px] uppercase tracking-wider bg-coral-soft/10 text-coral px-1.5 py-0.5 rounded-xs">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Strengths & Weaknesses */}
+            <div className="grid gap-4 md:grid-cols-2">
               {employee.strengths?.length > 0 && (
-                <div className="rounded-xl border border-green-200 bg-green-50 p-4">
-                  <h3 className="font-semibold text-green-900">Strengths</h3>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {employee.strengths?.map((s) => (
-                      <span
-                        key={s}
-                        className="rounded-full bg-green-100 px-3 py-1 text-xs text-green-700"
-                      >
+                <div className="border border-hairline bg-pale-green/10 p-4 rounded-sm">
+                  <h4 className="font-mono text-[10px] uppercase tracking-wider text-deep-green font-bold mb-2">Strengths</h4>
+                  <div className="flex flex-wrap gap-1">
+                    {employee.strengths.map((s) => (
+                      <span key={s} className="font-mono text-[9px] uppercase bg-pale-green text-deep-green px-1.5 py-0.5 rounded-xs">
                         {s}
                       </span>
                     ))}
@@ -277,70 +265,44 @@ export default function Onboarding() {
                 </div>
               )}
 
-              {/* Weaknesses */}
               {employee.weaknesses?.length > 0 && (
-                <div className="rounded-xl border border-red-200 bg-red-50 p-4">
-                  <h3 className="font-semibold text-red-900">Weaknesses</h3>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {employee.weaknesses?.map((w) => (
-                      <span
-                        key={w}
-                        className="rounded-full bg-red-100 px-3 py-1 text-xs text-red-700"
-                      >
+                <div className="border border-hairline bg-coral-soft/5 p-4 rounded-sm">
+                  <h4 className="font-mono text-[10px] uppercase tracking-wider text-coral font-bold mb-2">Development Items</h4>
+                  <div className="flex flex-wrap gap-1">
+                    {employee.weaknesses.map((w) => (
+                      <span key={w} className="font-mono text-[9px] uppercase bg-coral-soft/10 text-coral px-1.5 py-0.5 rounded-xs">
                         {w}
                       </span>
                     ))}
                   </div>
                 </div>
               )}
+            </div>
 
-              {/* Suggested Role */}
-              {employee.suggestedRole && (
-                <div className="rounded-xl border border-purple-200 bg-purple-50 p-4">
-                  <h3 className="font-semibold text-purple-900">
-                    Suggested Role
-                  </h3>
-                  <p className="mt-2 text-lg font-bold text-purple-700">
-                    {employee.suggestedRole}
-                  </p>
+            {/* Suggested Training */}
+            {employee.suggestedTraining?.length > 0 && (
+              <div className="border border-hairline p-4 rounded-sm bg-soft-stone/20">
+                <h4 className="font-mono text-[10px] uppercase tracking-wider text-primary font-bold mb-2">Suggested Curriculums</h4>
+                <div className="flex flex-wrap gap-1">
+                  {employee.suggestedTraining.map((t) => (
+                    <span key={t} className="font-mono text-[9px] uppercase bg-canvas border border-hairline px-2 py-0.5 rounded-xs text-primary">
+                      {t}
+                    </span>
+                  ))}
                 </div>
-              )}
-
-              {/* Suggested Training */}
-              {employee.suggestedTraining?.length > 0 && (
-                <div className="rounded-xl border border-orange-200 bg-orange-50 p-4">
-                  <h3 className="font-semibold text-orange-900">
-                    Suggested Training
-                  </h3>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {employee.suggestedTraining?.map((t) => (
-                      <span
-                        key={t}
-                        className="rounded-full bg-orange-100 px-3 py-1 text-xs text-orange-700"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Empty State */}
         {!employee && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            className="mt-6 rounded-xl border border-dashed border-slate-300 bg-white/50 p-8 text-center backdrop-blur-sm"
-          >
-            <Upload className="mx-auto h-8 w-8 text-slate-300" />
-            <p className="mt-2 text-sm text-slate-400">
-              Fill in the details and upload a resume to onboard an employee
+          <div className="border border-dashed border-hairline rounded-sm bg-soft-stone/30 p-8 text-center">
+            <Upload className="mx-auto h-8 w-8 text-slate opacity-60 mb-2" />
+            <p className="font-mono text-xs uppercase tracking-wider text-slate">
+              Awaiting credentials and resume submission.
             </p>
-          </motion.div>
+          </div>
         )}
       </div>
     </div>
