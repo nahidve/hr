@@ -45,5 +45,3 @@ coverage/
 *.key
 *.crt
 .secrets
-
-DESIGN-cohere.md

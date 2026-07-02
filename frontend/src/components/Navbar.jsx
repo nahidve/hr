@@ -26,7 +26,10 @@ export default function Navbar() {
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <span className="font-display text-lg font-bold tracking-[-0.04em] text-primary uppercase">
-                Cohere <span className="font-mono text-xs font-normal tracking-wider text-coral ml-1">HR</span>
+                VE{" "}
+                <span className="font-mono text-xs font-normal tracking-wider text-coral ml-1">
+                  HR
+                </span>
               </span>
             </Link>
           </div>
@@ -67,7 +70,11 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="text-primary hover:text-slate focus:outline-none"
             >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </button>
           </div>
         </div>
@@ -84,7 +91,9 @@ export default function Navbar() {
                 to={item.path}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`block py-2 text-sm font-mono uppercase tracking-wider font-medium ${
-                  isActive ? "text-primary font-bold" : "text-slate hover:text-primary"
+                  isActive
+                    ? "text-primary font-bold"
+                    : "text-slate hover:text-primary"
                 }`}
               >
                 {item.label}
