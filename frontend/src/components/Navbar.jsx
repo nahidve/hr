@@ -33,6 +33,11 @@ export default function Navbar() {
       icon: FileText,
     },
     {
+      label: "Policies",
+      path: "/policies",
+      icon: FileText,
+    },
+    {
       label: "Leave AI",
       path: "/leave",
       icon: Calendar,
@@ -42,10 +47,7 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur-lg">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 md:px-8">
-        <Link
-          to="/"
-          className="flex items-center gap-2"
-        >
+        <Link to="/" className="flex items-center gap-2">
           <span className="text-lg font-semibold text-slate-900">
             HR Portal
           </span>
@@ -53,9 +55,7 @@ export default function Navbar() {
 
         <div className="flex items-center gap-1">
           {nav.map((item) => {
-            const isActive =
-              location.pathname ===
-              item.path;
+            const isActive = location.pathname === item.path;
 
             return (
               <Link

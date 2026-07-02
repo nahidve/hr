@@ -129,56 +129,6 @@ export default function Dashboard() {
           ))}
         </motion.div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-lg font-semibold">Average Candidate Fit</h2>
-
-          <p className="mt-3 text-4xl font-bold">
-            {analytics?.averageFitScore}%
-          </p>
-        </div>
-
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-xl font-semibold">
-            Employees By Department
-          </h2>
-
-          <div className="h-80">
-            <ResponsiveContainer>
-              <PieChart>
-                <Pie
-                  data={analytics?.departmentData || []}
-                  dataKey="value"
-                  nameKey="name"
-                >
-                  {analytics?.departmentData?.map((entry, index) => (
-                    <Cell key={index} />
-                  ))}
-                </Pie>
-
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-xl font-semibold">Top Skills</h2>
-
-          <div className="h-80">
-            <ResponsiveContainer>
-              <BarChart data={analytics?.topSkills || []}>
-                <XAxis dataKey="skill" />
-
-                <YAxis />
-
-                <Tooltip />
-
-                <Bar dataKey="count" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
         {/* Two Column */}
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Recent Employees */}
@@ -283,6 +233,56 @@ export default function Dashboard() {
               )}
             </MovingBorder>
           </motion.div>
+
+          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 className="text-lg font-semibold">Average Candidate Fit</h2>
+
+            <p className="mt-3 text-4xl font-bold">
+              {analytics?.averageFitScore}%
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 className="mb-4 text-xl font-semibold">
+              Employees By Department
+            </h2>
+
+            <div className="h-80">
+              <ResponsiveContainer>
+                <PieChart>
+                  <Pie
+                    data={analytics?.departmentData || []}
+                    dataKey="value"
+                    nameKey="name"
+                  >
+                    {analytics?.departmentData?.map((entry, index) => (
+                      <Cell key={index} />
+                    ))}
+                  </Pie>
+
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 className="mb-4 text-xl font-semibold">Top Skills</h2>
+
+            <div className="h-80">
+              <ResponsiveContainer>
+                <BarChart data={analytics?.topSkills || []}>
+                  <XAxis dataKey="skill" />
+
+                  <YAxis />
+
+                  <Tooltip />
+
+                  <Bar dataKey="count" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </div>
       </div>
     </div>
