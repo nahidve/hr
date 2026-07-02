@@ -259,6 +259,71 @@ export default function Onboarding() {
                   </p>
                 </div>
               </div>
+
+              {/* Strengths */}
+              {employee.strengths?.length > 0 && (
+                <div className="rounded-xl border border-green-200 bg-green-50 p-4">
+                  <h3 className="font-semibold text-green-900">Strengths</h3>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {employee.strengths?.map((s) => (
+                      <span
+                        key={s}
+                        className="rounded-full bg-green-100 px-3 py-1 text-xs text-green-700"
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Weaknesses */}
+              {employee.weaknesses?.length > 0 && (
+                <div className="rounded-xl border border-red-200 bg-red-50 p-4">
+                  <h3 className="font-semibold text-red-900">Weaknesses</h3>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {employee.weaknesses?.map((w) => (
+                      <span
+                        key={w}
+                        className="rounded-full bg-red-100 px-3 py-1 text-xs text-red-700"
+                      >
+                        {w}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Suggested Role */}
+              {employee.suggestedRole && (
+                <div className="rounded-xl border border-purple-200 bg-purple-50 p-4">
+                  <h3 className="font-semibold text-purple-900">
+                    Suggested Role
+                  </h3>
+                  <p className="mt-2 text-lg font-bold text-purple-700">
+                    {employee.suggestedRole}
+                  </p>
+                </div>
+              )}
+
+              {/* Suggested Training */}
+              {employee.suggestedTraining?.length > 0 && (
+                <div className="rounded-xl border border-orange-200 bg-orange-50 p-4">
+                  <h3 className="font-semibold text-orange-900">
+                    Suggested Training
+                  </h3>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {employee.suggestedTraining?.map((t) => (
+                      <span
+                        key={t}
+                        className="rounded-full bg-orange-100 px-3 py-1 text-xs text-orange-700"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

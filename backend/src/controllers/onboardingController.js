@@ -37,12 +37,29 @@ Return ONLY valid JSON.
   "skills": [],
   "experienceSummary": "",
   "recommendedDepartment": "",
-  "departmentReason": ""
+  "departmentReason": "",
+
+  "strengths": [],
+  "weaknesses": [],
+  "suggestedRole": "",
+  "suggestedTraining": []
 }
 
 Resume:
 ${resumeText}
+
+Also analyze the candidate.
+
+Provide:
+
+- strengths
+- weaknesses
+- suggestedRole
+- suggestedTraining
+
+Return ONLY valid JSON.
 `;
+
     const aiResponse = await askAI(prompt, true);
 
     const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
@@ -81,6 +98,10 @@ ${resumeText}
       experienceSummary: parsed.experienceSummary || "",
       recommendedDepartment: parsed.recommendedDepartment || "",
       departmentReason: parsed.departmentReason || "",
+      strengths: parsed.strengths || [],
+      weaknesses: parsed.weaknesses || [],
+      suggestedRole: parsed.suggestedRole || "",
+      suggestedTraining: parsed.suggestedTraining || [],
 
       resumeText,
       fitScore,

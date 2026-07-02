@@ -85,6 +85,48 @@ export default function EmployeeDetails() {
       </div>
 
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className="mb-4 text-xl font-semibold">Resume Insights</h2>
+
+        <div className="space-y-6">
+          <div>
+            <h3 className="font-medium">Suggested Role</h3>
+
+            <p className="mt-2">{employee.suggestedRole}</p>
+          </div>
+
+          <div>
+            <h3 className="font-medium">Strengths</h3>
+
+            <div className="mt-2 flex flex-wrap gap-2">
+              {employee.strengths?.map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-medium">Development Areas</h3>
+
+            <div className="mt-2 flex flex-wrap gap-2">
+              {employee.weaknesses?.map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full bg-orange-100 px-3 py-1 text-sm text-orange-700"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="mb-2 text-xl font-semibold">Profile Metadata</h2>
 
         <p className="text-slate-500">
