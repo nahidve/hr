@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import api from "../services/api";
 import StatCard from "../components/StatCard";
+import { Link } from "react-router-dom";
 import {
   Users,
   FileText,
@@ -207,9 +208,12 @@ export default function Dashboard() {
                           {emp.name?.charAt(0) || "?"}
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-slate-900">
+                          <Link
+                            to={`/employees/${emp._id}`}
+                            className="text-sm font-medium text-slate-900 hover:text-slate-700 hover:underline"
+                          >
                             {emp.name}
-                          </p>
+                          </Link>
                           <p className="text-xs text-slate-400">{emp.email}</p>
                         </div>
                       </div>
