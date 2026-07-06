@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
 import BlurText from "../components/BlurText";
+import LogoLoop from "../components/LogoLoop";
 import { Search } from "lucide-react";
 
 export default function EmployeeDirectory() {
@@ -116,6 +117,22 @@ export default function EmployeeDirectory() {
             ))}
           </div>
         )}
+
+        {/* Partner logos */}
+        <div className="mt-12">
+          <LogoLoop
+            logos={[
+              { node: <span className="font-mono text-sm px-3">Acme</span>, title: 'Acme' },
+              { node: <span className="font-mono text-sm px-3">Globex</span>, title: 'Globex' },
+              { node: <span className="font-mono text-sm px-3">Initech</span>, title: 'Initech' }
+            ]}
+            speed={60}
+            gap={40}
+            logoHeight={34}
+            fadeOut
+            ariaLabel="Customers"
+          />
+        </div>
       </div>
     </div>
   );

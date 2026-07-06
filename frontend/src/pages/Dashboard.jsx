@@ -12,6 +12,9 @@ import {
 } from "lucide-react";
 import CountUp from "../components/ui/CountUp";
 import BlurText from "../components/BlurText";
+import LogoLoop from "../components/LogoLoop";
+import MagnetLines from "../components/MagnetLines";
+import ClickSpark from "../components/ClickSpark";
 import {
   PieChart,
   Pie,
@@ -86,7 +89,18 @@ export default function Dashboard() {
       {/* Editorial space / Hero Header */}
       <div className="border-b border-hairline bg-canvas py-12">
         <div className="mx-auto max-w-7xl px-6 md:px-8">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <div className="relative flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <MagnetLines
+              rows={6}
+              columns={10}
+              containerSize="28vmin"
+              lineColor="#f3f4f6"
+              lineWidth="1px"
+              lineHeight="36px"
+              baseAngle={-12}
+              className="absolute right-4 top-4 pointer-events-none opacity-10 hidden md:block"
+              style={{ zIndex: 0 }}
+            />
             <div>
               <p className="font-mono text-xs uppercase tracking-wider text-coral font-medium mb-2">System Overview</p>
               <h1 className="font-display text-4xl font-bold tracking-tight text-primary md:text-5xl uppercase">
@@ -105,9 +119,11 @@ export default function Dashboard() {
               />
             </div>
             <div>
-              <span className="inline-flex items-center gap-2 border border-hairline bg-soft-stone px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-primary rounded-xs">
-                <Clock className="h-3 w-3 text-slate" /> Last 30 Days
-              </span>
+              <ClickSpark sparkColor="#111" sparkSize={8} sparkRadius={18} sparkCount={6} duration={500}>
+                <span className="inline-flex items-center gap-2 border border-hairline bg-soft-stone px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-primary rounded-xs">
+                  <Clock className="h-3 w-3 text-slate" /> Last 30 Days
+                </span>
+              </ClickSpark>
             </div>
           </div>
         </div>
@@ -115,6 +131,27 @@ export default function Dashboard() {
 
       {/* Main Grid Content */}
       <div className="mx-auto max-w-7xl px-6 py-12 md:px-8">
+        {/* Partner logos loop */}
+        <div className="mb-8">
+          <LogoLoop
+            logos={[
+              { node: <span className="font-mono text-sm px-3">React</span>, title: 'React' },
+              { node: <span className="font-mono text-sm px-3">Next.js</span>, title: 'Next.js' },
+              { node: <span className="font-mono text-sm px-3">TypeScript</span>, title: 'TypeScript' },
+              { node: <span className="font-mono text-sm px-3">Tailwind</span>, title: 'Tailwind' }
+            ]}
+            speed={80}
+            direction="left"
+            gap={48}
+            logoHeight={40}
+            hoverSpeed={0}
+            scaleOnHover
+            fadeOut
+            fadeOutColor="#ffffff"
+            ariaLabel="Technology partners"
+            className="w-full"
+          />
+        </div>
         {/* Key Metrics Grid */}
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 mb-12">
           {cardData.map((item) => (
