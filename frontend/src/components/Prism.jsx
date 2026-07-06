@@ -281,11 +281,17 @@ const Prism = ({
     };
 
     const rnd = () => Math.random();
+    // randomized frequencies and phases per instance
     const wX = (0.3 + rnd() * 0.6) * RSX;
     const wY = (0.2 + rnd() * 0.7) * RSY;
     const wZ = (0.1 + rnd() * 0.5) * RSZ;
     const phX = rnd() * Math.PI * 2;
     const phZ = rnd() * Math.PI * 2;
+    const ampYaw = 0.6 * (0.5 + rnd() * 1.0);
+    const ampPitch = 0.5 * (0.3 + rnd() * 1.2);
+    const ampRoll = 0.5 * (0.2 + rnd() * 1.0);
+    const centerFreq = 0.2 + rnd() * 0.8;
+    const centerPhase = rnd() * Math.PI * 2;
 
     let yaw = 0,
       pitch = 0,
@@ -323,7 +329,8 @@ const Prism = ({
       window.addEventListener('mouseleave', onLeave);
       window.addEventListener('blur', onBlur);
       program.uniforms.uUseBaseWobble.value = 0;
-    } else if (animationType === '3drotate') {
+    } else if (animationType === '3drotate' || animationType === 'rotate') {
+      // use 3D rotation path (randomized) for both '3drotate' and 'rotate'
       program.uniforms.uUseBaseWobble.value = 0;
     } else {
       program.uniforms.uUseBaseWobble.value = 1;
@@ -353,12 +360,15 @@ const Prism = ({
             Math.abs(yaw - targetYaw) < 1e-4 && Math.abs(pitch - targetPitch) < 1e-4 && Math.abs(roll) < 1e-4;
           if (settled) continueRAF = false;
         }
-      } else if (animationType === '3drotate') {
+      } else if (animationType === '3drotate' || animationType === 'rotate') {
         const tScaled = time * TS;
-        yaw = tScaled * wY;
-        pitch = Math.sin(tScaled * wX + phX) * 0.6;
-        roll = Math.sin(tScaled * wZ + phZ) * 0.5;
+        // randomized motion combining drifting and oscillation
+        yaw = Math.sin(tScaled * wY + phX) * ampYaw + tScaled * 0.02;
+        pitch = Math.sin(tScaled * wX * 0.9 + phX * 0.7) * ampPitch * 0.9;
+        roll = Math.sin(tScaled * wZ + phZ) * ampRoll * 0.7;
         program.uniforms.uRot.value = setMat3FromEuler(yaw, pitch, roll, rotBuf);
+        // slight pulsing/shift of the pattern center
+        program.uniforms.uCenterShift.value = H * 0.25 + Math.sin(tScaled * centerFreq + centerPhase) * (H * 0.06);
         if (TS < 1e-6) continueRAF = false;
       } else {
         rotBuf[0] = 1;

@@ -45,22 +45,23 @@ export default function Register() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-white p-6">
-      <div className="pointer-events-none absolute inset-0 opacity-60">
+      <div className="pointer-events-none absolute inset-0" style={{ opacity: 0.9 }}>
         <Prism
           animationType="rotate"
-          timeScale={0.5}
+          timeScale={0.6}
           height={3.5}
           baseWidth={5.5}
-          scale={3.6}
-          hueShift={0.1}
-          colorFrequency={1.2}
-          noise={0.02}
-          glow={0.8}
+          scale={3.8}
+          hueShift={0.25}
+          colorFrequency={1.8}
+          noise={0.03}
+          glow={1.4}
+          bloom={1.2}
           suspendWhenOffscreen
         />
       </div>
 
-      <div className="relative w-full max-w-md rounded-2xl bg-white/95 p-8 shadow-lg">
+      <div className="relative w-full max-w-md rounded-2xl bg-white/80 p-8 shadow-lg">
         <h1 className="mb-2 text-3xl font-bold">
           Create Account
         </h1>
