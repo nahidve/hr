@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import api from "../services/api";
 import { ArrowLeft } from "lucide-react";
 import { BeautifulRadar } from "../components/ChartWrapper";
+import { EmployeeDetailsSkeleton } from "../components/ui/Skeleton";
 
 export default function EmployeeDetails() {
   const { id } = useParams();
@@ -25,11 +26,7 @@ export default function EmployeeDetails() {
   };
 
   if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-canvas">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-hairline border-t-primary" />
-      </div>
-    );
+    return <EmployeeDetailsSkeleton />;
   }
 
   if (!employee) {

@@ -20,6 +20,7 @@ import {
   BeautifulBar,
   BeautifulLine,
 } from "../components/ChartWrapper";
+import { DashboardSkeleton } from "../components/ui/Skeleton";
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
@@ -94,11 +95,7 @@ export default function Dashboard() {
   };
 
   if (!stats) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-canvas">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-hairline border-t-primary" />
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   const cardData = [
