@@ -21,6 +21,12 @@ import {
   BeautifulLine,
 } from "../components/ChartWrapper";
 import { DashboardSkeleton } from "../components/ui/Skeleton";
+import { FlipWords } from "../components/ui/flip-words";
+import {
+  LiveTelemetryConsole,
+  CandidateRadarSweep,
+  TelemetryGauge,
+} from "../components/MesmerizingUI";
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
@@ -157,7 +163,7 @@ export default function Dashboard() {
             <div>
               <p className="font-mono text-xs uppercase tracking-wider text-coral font-medium mb-2">System Overview</p>
               <h1 className="font-display text-4xl font-bold tracking-tight text-primary md:text-5xl uppercase">
-                Enterprise Employee Management
+                Enterprise Employee <FlipWords words={["Management", "Compliance", "Objectives", "Telemetry"]} className="text-action-blue" />
               </h1>
               <p className="font-body text-slate text-sm mt-1">
                 Real-time workforce deployment and policy compliance telemetry.
@@ -444,25 +450,11 @@ export default function Dashboard() {
               </div>
 
               {/* Fit score summary (1 col) */}
-              <div className="border border-hairline bg-deep-green text-on-dark p-6 rounded-sm flex flex-col justify-between">
-                <div>
-                  <h3 className="font-mono text-xs uppercase tracking-wider text-coral font-bold">
-                    Recruitment Fit
-                  </h3>
-                  <p className="font-body text-xs text-on-dark/70 mt-2">
-                    Average fit scoring generated from parsed candidate resumes.
-                  </p>
-                </div>
-                <div className="mt-8">
-                  <span className="font-mono text-5xl font-bold text-on-dark">
-                    <CountUp to={analytics?.averageFitScore || 0} className="count-up-text" />%
-                  </span>
-                  <p className="font-mono text-[10px] uppercase tracking-wider text-on-dark/50 mt-1">
-                    System-wide Average
-                  </p>
-                </div>
-              </div>
+              <TelemetryGauge value={analytics?.averageFitScore || 0} label="System Average" />
             </div>
+
+            {/* Live Telemetry Console Feed */}
+            <LiveTelemetryConsole />
           </div>
 
           {/* Right Column: Analytics & Charts (4 columns) */}
@@ -499,6 +491,9 @@ export default function Dashboard() {
                 <BeautifulBar data={skillsData} />
               </div>
             </div>
+
+            {/* Candidate Radar Scan Sweep */}
+            <CandidateRadarSweep />
           </div>
         </div>
       </div>
