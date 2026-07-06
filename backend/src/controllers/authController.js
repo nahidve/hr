@@ -13,7 +13,7 @@ export const register = async (
       name,
       email,
       password,
-      role,
+      role = "Employee",
     } = req.body;
 
     const existing =
@@ -40,8 +40,15 @@ export const register = async (
         email,
         password:
           hashedPassword,
-        role: "Employee",
+        role,
       });
+
+    if (role === "Employee") {
+      await Employee.create({
+        name,
+        email,
+      });
+    }
 
     res.status(201).json({
       message:
@@ -130,16 +137,23 @@ export const me = async (
 export const getProfile =
   async (req, res) => {
     try {
-      const employee =
+      let employee =
         await Employee.findOne({
           email:
             req.user.email,
         });
 
       if (!employee) {
-        return res.status(404).json({
-          message:
-            "Employee profile not found",
+        if (req.user.role !== "Employee") {
+          return res.status(404).json({
+            message:
+              "Employee profile not found",
+          });
+        }
+
+        employee = await Employee.create({
+          name: req.user.name || "",
+          email: req.user.email,
         });
       }
 
