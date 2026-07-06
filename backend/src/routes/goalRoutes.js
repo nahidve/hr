@@ -1,5 +1,8 @@
 import express from "express";
-
+import {
+  protect,
+  allowRoles,
+} from "../middleware/authMiddleware.js";
 import {
   createGoal,
   getGoals,
@@ -9,12 +12,31 @@ import {
 
 const router = express.Router();
 
-router.get("/", getGoals);
+router.get(
+  "/",
+  protect,
+  getGoals
+);
 
-router.post("/", createGoal);
+router.post(
+  "/",
+  protect,
+  allowRoles("HR"),
+  createGoal
+);
 
-router.put("/:id", updateGoal);
+router.put(
+  "/:id",
+  protect,
+  allowRoles("HR"),
+  updateGoal
+);
 
-router.delete("/:id", deleteGoal);
+router.delete(
+  "/:id",
+  protect,
+  allowRoles("HR"),
+  deleteGoal
+);
 
 export default router;
