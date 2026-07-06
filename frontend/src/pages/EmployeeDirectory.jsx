@@ -161,7 +161,7 @@ export default function EmployeeDirectory() {
               <Link
                 key={employee._id}
                 to={`/employees/${employee._id}`}
-                className="group border border-hairline bg-canvas p-6 rounded-sm hover:border-primary transition-all duration-300 flex flex-col justify-between hover:shadow-md"
+                className="group border border-hairline bg-canvas p-6 rounded-sm hover:border-action-blue hover:shadow-[0_0_20px_rgba(24,99,220,0.12)] transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">

@@ -210,7 +210,7 @@ export default function Dashboard() {
           {cardData.map((item) => (
             <div
               key={item.title}
-              className="border border-hairline bg-canvas p-5 rounded-sm hover:border-slate transition-colors flex flex-col justify-between"
+              className="border border-hairline bg-canvas p-5 rounded-sm hover:border-action-blue hover:shadow-[0_0_15px_rgba(24,99,220,0.12)] transition-all duration-300 flex flex-col justify-between"
             >
               <div>
                 <p className="font-mono text-[10px] uppercase tracking-wider text-slate mb-1">
