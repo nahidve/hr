@@ -10,6 +10,7 @@ import {
   Clock,
   ChevronRight,
 } from "lucide-react";
+import CountUp from "../components/ui/CountUp";
 import {
   PieChart,
   Pie,
@@ -116,9 +117,13 @@ export default function Dashboard() {
                 <p className="font-mono text-[10px] uppercase tracking-wider text-slate mb-1">
                   {item.title}
                 </p>
-                <p className="font-display text-2xl font-bold tracking-tight text-primary">
-                  {item.value}
-                </p>
+                        <p className="font-display text-2xl font-bold tracking-tight text-primary">
+                          {typeof item.value === 'number' ? (
+                            <CountUp to={item.value} className="count-up-text" />
+                          ) : (
+                            item.value
+                          )}
+                        </p>
               </div>
               <div className="mt-4 flex items-center justify-end text-slate">
                 <item.icon className="h-4 w-4 opacity-60" />
@@ -261,7 +266,7 @@ export default function Dashboard() {
                         </div>
                         <div className="text-right">
                           <p className="font-mono text-xs font-semibold text-primary">
-                            {goal.progress}%
+                            <CountUp to={goal.progress || 0} className="count-up-text" />%
                           </p>
                           <span
                             className={`inline-block font-mono text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded-xs mt-1 ${
@@ -293,7 +298,7 @@ export default function Dashboard() {
                 </div>
                 <div className="mt-8">
                   <span className="font-mono text-5xl font-bold text-on-dark">
-                    {analytics?.averageFitScore || 0}%
+                    <CountUp to={analytics?.averageFitScore || 0} className="count-up-text" />%
                   </span>
                   <p className="font-mono text-[10px] uppercase tracking-wider text-on-dark/50 mt-1">
                     System-wide Average
@@ -347,7 +352,7 @@ export default function Dashboard() {
                       style={{ backgroundColor: COLORS[index % COLORS.length] }}
                     />
                     <span className="font-mono text-[10px] text-slate truncate">
-                      {dept.name} ({dept.value})
+                      {dept.name} (<CountUp to={dept.value || 0} className="count-up-text inline" />)
                     </span>
                   </div>
                 ))}

@@ -46,3 +46,8 @@
     font-family: var(--font-body);
   }
 }
+
+/* CountUp text style */
+.count-up-text {
+  font-variant-numeric: tabular-nums;
+}
