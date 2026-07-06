@@ -131,7 +131,7 @@ export default function InterviewGenerator() {
               <button
                 onClick={generate}
                 disabled={loading || !employeeId}
-                className="w-full bg-primary text-on-primary font-mono text-xs uppercase tracking-wider rounded-pill py-3 hover:bg-cohere-black transition-colors disabled:opacity-50 inline-flex items-center justify-center gap-2"
+                className="w-full bg-primary text-on-primary font-mono text-xs uppercase tracking-wider rounded-pill py-3 hover:bg-cohere-black transition-colors disabled:opacity-50 inline-flex items-center justify-center gap-2 cursor-pointer"
               >
                 {loading ? (
                   <>
@@ -145,6 +145,45 @@ export default function InterviewGenerator() {
                   </>
                 )}
               </button>
+
+              {/* Selected Profile Insights Card */}
+              {selectedEmployee && (
+                <div className="mt-6 border border-hairline p-5 rounded-sm bg-soft-stone/30 space-y-4 animate-fade-in">
+                  <div className="pb-2 border-b border-hairline flex items-center justify-between">
+                    <span className="font-mono text-[9px] uppercase tracking-wider text-slate">Profile Insights</span>
+                    {selectedEmployee.fitScore !== undefined && (
+                      <span className="font-mono text-[9px] uppercase bg-pale-green text-deep-green border border-deep-green/10 px-1.5 py-0.5 rounded-xs">
+                        Fit: {selectedEmployee.fitScore}%
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="font-display text-sm font-bold text-primary uppercase">{selectedEmployee.name}</h3>
+                    <p className="font-mono text-[10px] text-slate mt-0.5">{selectedEmployee.email}</p>
+                    <span className="inline-block mt-2 font-mono text-[9px] uppercase tracking-wider bg-soft-stone text-primary px-1.5 py-0.5 rounded-xs">
+                      Dept: {selectedEmployee.department || "General"}
+                    </span>
+                  </div>
+
+                  {selectedEmployee.skills && selectedEmployee.skills.length > 0 && (
+                    <div>
+                      <span className="font-mono text-[9px] uppercase tracking-wider text-slate block mb-1.5">Core Skills:</span>
+                      <div className="flex flex-wrap gap-1">
+                        {selectedEmployee.skills.slice(0, 4).map((skill, index) => (
+                          <span key={index} className="font-mono text-[8px] uppercase tracking-wider border border-hairline px-1.5 py-0.5 rounded-xs bg-canvas text-primary">
+                            {skill}
+                          </span>
+                        ))}
+                        {selectedEmployee.skills.length > 4 && (
+                          <span className="font-mono text-[8px] text-slate py-0.5">
+                            +{selectedEmployee.skills.length - 4}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -156,7 +195,7 @@ export default function InterviewGenerator() {
           </h2>
 
           {questions ? (
-            <div className="border border-hairline bg-soft-stone p-8 rounded-sm space-y-6">
+            <div className="border border-hairline bg-soft-stone p-6 rounded-sm space-y-6">
               <div className="flex justify-between items-center pb-4 border-b border-hairline">
                 <span className="font-mono text-[10px] uppercase tracking-wider text-slate flex items-center gap-1.5">
                   <FileText className="h-4 w-4 text-primary" /> Profile: {selectedEmployee?.name}
@@ -166,14 +205,15 @@ export default function InterviewGenerator() {
                   <CopyButton text={questions} />
                   <button
                     onClick={save}
-                    className="bg-primary text-on-primary font-mono text-[10px] uppercase tracking-wider rounded-pill px-4 py-2 hover:bg-cohere-black transition-colors inline-flex items-center gap-1.5"
+                    className="bg-primary text-on-primary font-mono text-[10px] uppercase tracking-wider rounded-pill px-4 py-2 hover:bg-cohere-black transition-colors inline-flex items-center gap-1.5 cursor-pointer"
                   >
                     <Download className="h-3.5 w-3.5" /> Save Set
                   </button>
                 </div>
               </div>
 
-              <div className="font-body text-sm text-ink leading-relaxed whitespace-pre-wrap max-h-[500px] overflow-y-auto pr-2">
+              {/* Visual Document Sheet Wrapper */}
+              <div className="bg-canvas border border-hairline/80 shadow-md p-8 md:p-10 text-ink rounded-sm font-body text-sm leading-relaxed whitespace-pre-wrap max-h-[550px] overflow-y-auto pr-2 relative">
                 {questions}
               </div>
             </div>

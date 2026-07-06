@@ -38,14 +38,14 @@ export default function PolicyAssistant() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const askQuestion = async () => {
-    if (!question.trim()) return;
-    const currentQuestion = question;
+  const askQuestion = async (overrideQuestion) => {
+    const qText = overrideQuestion || question;
+    if (!qText.trim()) return;
 
     try {
       setLoading(true);
-      const { data } = await api.post("/policies/ask", { question: currentQuestion });
-      setMessages((prev) => [...prev, { question: currentQuestion, answer: data.answer }]);
+      const { data } = await api.post("/policies/ask", { question: qText });
+      setMessages((prev) => [...prev, { question: qText, answer: data.answer }]);
       setQuestion("");
     } catch (error) {
       console.error(error);
@@ -98,11 +98,30 @@ export default function PolicyAssistant() {
             {/* Messages Area */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
               {messages.length === 0 ? (
-                <div className="flex h-full flex-col items-center justify-center text-center space-y-3">
-                  <Sparkles className="h-6 w-6 text-coral" />
-                  <p className="text-xs uppercase tracking-wider text-slate max-w-xs">
-                    Ready for prompt input. Ask about leaves, remote policy, structure, or guidelines.
-                  </p>
+                <div className="flex h-full flex-col items-center justify-center text-center space-y-6 px-4">
+                  <div className="space-y-2">
+                    <Sparkles className="mx-auto h-6 w-6 text-coral animate-pulse" />
+                    <p className="text-xs uppercase tracking-wider text-slate max-w-sm">
+                      Ready for prompt input. Ask about leaves, remote policy, structure, or compliance.
+                    </p>
+                  </div>
+
+                  <div className="w-full max-w-md space-y-2.5">
+                    <span className="font-mono text-[9px] uppercase tracking-wider text-slate block text-center mb-1">Suggested Preset Prompts</span>
+                    {[
+                      "What is the remote work policy?",
+                      "Tell me about annual leave allowance.",
+                      "Show maternity and paternity benefits.",
+                    ].map((preset, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => askQuestion(preset)}
+                        className="w-full text-left bg-white/5 border border-white/10 hover:bg-white/10 hover:border-coral transition-all duration-200 px-4 py-3 rounded-xs text-xs text-on-dark/95 font-mono hover:text-white cursor-pointer block"
+                      >
+                        &rarr; {preset}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               ) : (
                 <div className="space-y-6">

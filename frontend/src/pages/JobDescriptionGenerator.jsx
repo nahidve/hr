@@ -180,7 +180,7 @@ export default function JobDescriptionGenerator() {
           </h2>
 
           {content ? (
-            <div className="border border-hairline bg-soft-stone p-8 rounded-sm space-y-6">
+            <div className="border border-hairline bg-soft-stone p-6 rounded-sm space-y-6">
               <div className="flex justify-between items-center pb-4 border-b border-hairline">
                 <span className="font-mono text-[10px] uppercase tracking-wider text-slate flex items-center gap-1.5">
                   <FileText className="h-4 w-4 text-primary" /> Generated Drafting
@@ -190,14 +190,15 @@ export default function JobDescriptionGenerator() {
                   <CopyButton text={content} />
                   <button
                     onClick={save}
-                    className="bg-primary text-on-primary font-mono text-[10px] uppercase tracking-wider rounded-pill px-4 py-2 hover:bg-cohere-black transition-colors inline-flex items-center gap-1.5"
+                    className="bg-primary text-on-primary font-mono text-[10px] uppercase tracking-wider rounded-pill px-4 py-2 hover:bg-cohere-black transition-colors inline-flex items-center gap-1.5 cursor-pointer"
                   >
                     <Download className="h-3.5 w-3.5" /> Save Template
                   </button>
                 </div>
               </div>
 
-              <div className="font-body text-sm text-ink leading-relaxed whitespace-pre-wrap max-h-[500px] overflow-y-auto pr-2">
+              {/* Visual Document Sheet Wrapper */}
+              <div className="bg-canvas border border-hairline/80 shadow-md p-8 md:p-10 text-ink rounded-sm font-body text-sm leading-relaxed whitespace-pre-wrap max-h-[550px] overflow-y-auto pr-2 relative">
                 {content}
               </div>
             </div>
