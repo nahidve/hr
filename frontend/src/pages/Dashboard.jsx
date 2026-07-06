@@ -11,6 +11,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import CountUp from "../components/ui/CountUp";
+import BlurText from "../components/BlurText";
 import {
   PieChart,
   Pie,
@@ -94,6 +95,14 @@ export default function Dashboard() {
               <p className="font-body text-slate text-sm mt-1">
                 Real-time workforce deployment and policy compliance telemetry.
               </p>
+              <BlurText
+                text={"Optimize your workforce, streamline operations, and enhance productivity."}
+                delay={200}
+                animateBy="words"
+                direction="top"
+                onAnimationComplete={() => console.log('Animation completed!')}
+                className="text-lg mt-4"
+              />
             </div>
             <div>
               <span className="inline-flex items-center gap-2 border border-hairline bg-soft-stone px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-primary rounded-xs">

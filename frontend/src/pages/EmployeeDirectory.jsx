@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import BlurText from "../components/BlurText";
 import { Search } from "lucide-react";
 
 export default function EmployeeDirectory() {
@@ -41,6 +42,13 @@ export default function EmployeeDirectory() {
           <p className="font-body text-slate text-sm mt-1">
             Browse and query employee profiles, skill sets, and department deployments.
           </p>
+          <BlurText
+            text={"Find the right people, faster."}
+            delay={150}
+            animateBy="words"
+            direction="top"
+            className="text-lg mt-4"
+          />
         </div>
       </div>
 

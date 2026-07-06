@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import { Trash2, AlertCircle } from "lucide-react";
+import BlurText from "../components/BlurText";
 
 export default function Goals() {
   const [employees, setEmployees] = useState([]);
@@ -70,6 +71,13 @@ export default function Goals() {
           <p className="font-body text-slate text-sm mt-1">
             Establish strategic milestones, track completion rates, and assign goals to personnel.
           </p>
+          <BlurText
+            text={"Measure, iterate, succeed."}
+            delay={180}
+            animateBy="words"
+            direction="top"
+            className="text-lg mt-4"
+          />
         </div>
       </div>
 
