@@ -1,87 +1,127 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import api from "../services/api";
+import Prism from "../components/Prism"; // adjust path if different
 
 export default function Register() {
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({ name: "", email: "", password: "", role: "Employee" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "Employee",
+  });
+
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       setLoading(true);
+
       await api.post("/auth/register", form);
+
       navigate("/login");
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Registration failed");
+      alert(
+        err.response?.data?.message ||
+          "Registration failed"
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-canvas">
-      <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
-          <h2 className="font-display text-4xl leading-tight" style={{ letterSpacing: '-1px' }}>Create account</h2>
-          <p className="mt-2 text-sm text-slate-600">Register to start using the HR system.</p>
-        </div>
+    <div className="relative flex min-h-screen items-center justify-center bg-white p-6">
+      <div className="pointer-events-none absolute inset-0 opacity-60">
+        <Prism
+          animationType="rotate"
+          timeScale={0.5}
+          height={3.5}
+          baseWidth={5.5}
+          scale={3.6}
+          hueShift={0.1}
+          colorFrequency={1.2}
+          noise={0.02}
+          glow={0.8}
+          suspendWhenOffscreen
+        />
+      </div>
 
-        <form onSubmit={handleSubmit} className="bg-white border border-hairline rounded-[16px] p-6 shadow-sm">
-          <label className="block text-sm mb-2 text-slate-600">Full name</label>
+      <div className="relative w-full max-w-md rounded-2xl bg-white/95 p-8 shadow-lg">
+        <h1 className="mb-2 text-3xl font-bold">
+          Create Account
+        </h1>
+
+        <p className="mb-6 text-sm text-gray-500">
+          Register to access the HR Portal
+        </p>
+
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4"
+        >
           <input
             name="name"
             value={form.name}
             onChange={handleChange}
+            placeholder="Full Name"
+            className="w-full rounded-lg border p-3"
             required
-            className="w-full mb-4 rounded-md border border-light px-3 py-3"
-            placeholder="Jane Doe"
           />
 
-          <label className="block text-sm mb-2 text-slate-600">Work email</label>
           <input
             name="email"
             type="email"
             value={form.email}
             onChange={handleChange}
+            placeholder="Email"
+            className="w-full rounded-lg border p-3"
             required
-            className="w-full mb-4 rounded-md border border-light px-3 py-3"
-            placeholder="you@company.com"
           />
 
-          <label className="block text-sm mb-2 text-slate-600">Password</label>
           <input
             name="password"
             type="password"
             value={form.password}
             onChange={handleChange}
+            placeholder="Password"
+            className="w-full rounded-lg border p-3"
             required
-            className="w-full mb-4 rounded-md border border-light px-3 py-3"
-            placeholder="Choose a secure password"
           />
 
-          <label className="block text-sm mb-2 text-slate-600">Role</label>
-          <select name="role" value={form.role} onChange={handleChange} className="w-full mb-4 rounded-md border border-light px-3 py-3">
-            <option value="Employee">Employee</option>
-            <option value="HR">HR (request access)</option>
-          </select>
-
-          <button type="submit" disabled={loading} className="w-full inline-flex items-center justify-center rounded-pill bg-[#17171c] text-white py-3 px-4 text-sm font-medium" style={{ borderRadius: 32 }}>
-            {loading ? 'Creating...' : 'Create account'}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg bg-black p-3 text-white"
+          >
+            {loading
+              ? "Creating Account..."
+              : "Sign Up"}
           </button>
-
-          <div className="mt-4 text-sm text-center">
-            <button type="button" onClick={() => navigate('/login')} className="text-action-blue underline" style={{ color: '#1863dc' }}>
-              Already have an account? Sign in
-            </button>
-          </div>
         </form>
+
+        <p className="mt-6 text-center text-sm">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="font-medium text-blue-600"
+          >
+            Sign In
+          </Link>
+        </p>
       </div>
     </div>
   );
