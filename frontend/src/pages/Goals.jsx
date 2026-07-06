@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import { Trash2, AlertCircle } from "lucide-react";
 import BlurText from "../components/BlurText";
+import { BeautifulDoughnut } from "../components/ChartWrapper";
 
 export default function Goals() {
   const [employees, setEmployees] = useState([]);
@@ -184,6 +185,50 @@ export default function Goals() {
           <h2 className="font-mono text-xs uppercase tracking-wider text-primary font-bold mb-4 pb-2 border-b border-hairline">
             Active Telemetry
           </h2>
+
+          {(() => {
+            const completedCount = goals.filter((g) => g.status === "Completed").length;
+            const inProgressCount = goals.filter((g) => g.status === "In Progress").length;
+            const otherCount = goals.length - completedCount - inProgressCount;
+
+            const goalChartData = {
+              labels: ["Completed", "In Progress", "Pending/Other"],
+              datasets: [
+                {
+                  data: [completedCount, inProgressCount, otherCount],
+                  backgroundColor: ["#003c33", "#1863dc", "#ff7759"],
+                  borderColor: "#ffffff",
+                  borderWidth: 2,
+                  hoverOffset: 4,
+                },
+              ],
+            };
+
+            return goals.length > 0 ? (
+              <div className="border border-hairline bg-canvas p-6 rounded-sm mb-6 flex flex-col md:flex-row items-center gap-6">
+                <div className="w-full md:w-1/2 h-44 flex items-center justify-center">
+                  <BeautifulDoughnut data={goalChartData} />
+                </div>
+                <div className="w-full md:w-1/2 space-y-2">
+                  <h3 className="font-mono text-[11px] uppercase tracking-wider text-primary font-bold mb-3">
+                    OKR Status Breakdown
+                  </h3>
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-slate">Completed:</span>
+                    <span className="font-bold text-deep-green">{completedCount}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-slate">In Progress:</span>
+                    <span className="font-bold text-action-blue">{inProgressCount}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-slate">Pending / Other:</span>
+                    <span className="font-bold text-coral">{otherCount}</span>
+                  </div>
+                </div>
+              </div>
+            ) : null;
+          })()}
 
           {goals.length === 0 ? (
             <div className="text-center py-12 border border-dashed border-hairline rounded-sm bg-soft-stone/30">

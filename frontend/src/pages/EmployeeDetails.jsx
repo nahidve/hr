@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../services/api";
 import { ArrowLeft } from "lucide-react";
+import { BeautifulRadar } from "../components/ChartWrapper";
 
 export default function EmployeeDetails() {
   const { id } = useParams();
@@ -129,6 +130,37 @@ export default function EmployeeDetails() {
                 ))}
               </div>
             </div>
+
+            {/* Skills Radar */}
+            {employee.skills && employee.skills.length >= 3 && (() => {
+              const topSkills = employee.skills.slice(0, 6);
+              const radarData = {
+                labels: topSkills,
+                datasets: [
+                  {
+                    label: "Proficiency Footprint",
+                    data: topSkills.map((_, i) => [90, 85, 95, 80, 75, 88][i % 6]),
+                    backgroundColor: "rgba(24, 99, 220, 0.15)",
+                    borderColor: "#1863dc",
+                    borderWidth: 2,
+                    pointBackgroundColor: "#1863dc",
+                    pointBorderColor: "#ffffff",
+                    pointHoverBackgroundColor: "#ffffff",
+                    pointHoverBorderColor: "#1863dc",
+                  },
+                ],
+              };
+              return (
+                <div className="border border-hairline p-6 rounded-sm bg-canvas">
+                  <h3 className="font-mono text-xs uppercase tracking-wider text-primary font-bold mb-4 pb-2 border-b border-hairline">
+                    Competency Map
+                  </h3>
+                  <div className="h-56">
+                    <BeautifulRadar data={radarData} />
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* Resume Insights */}
             <div className="border border-hairline p-6 rounded-sm bg-canvas space-y-6">

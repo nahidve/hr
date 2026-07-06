@@ -16,16 +16,10 @@ import LogoLoop from "../components/LogoLoop";
 import MagnetLines from "../components/MagnetLines";
 import ClickSpark from "../components/ClickSpark";
 import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-} from "recharts";
+  BeautifulDoughnut,
+  BeautifulBar,
+  BeautifulLine,
+} from "../components/ChartWrapper";
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
@@ -33,6 +27,7 @@ export default function Dashboard() {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [analytics, setAnalytics] = useState(null);
   const [goals, setGoals] = useState([]);
+  const [timelineData, setTimelineData] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -59,6 +54,40 @@ export default function Dashboard() {
       setLeaveRequests(leaveResponse.data);
       setAnalytics(analyticsResponse.data);
       setGoals(goalsResponse.data.slice(0, 5));
+
+      // Calculate timeline data based on onboarding dates
+      const allEmployees = employeesResponse.data || [];
+      const monthCounts = {};
+      
+      allEmployees.forEach((emp) => {
+        if (!emp.createdAt) return;
+        const date = new Date(emp.createdAt);
+        const label = date.toLocaleDateString("en-US", {
+          month: "short",
+          year: "2-digit",
+        });
+        monthCounts[label] = (monthCounts[label] || 0) + 1;
+      });
+
+      // Sort labels chronologically
+      const sortedLabels = Object.keys(monthCounts).sort((a, b) => {
+        const dateA = new Date("01 " + a);
+        const dateB = new Date("01 " + b);
+        return dateA - dateB;
+      });
+
+      const counts = sortedLabels.map((lbl) => monthCounts[lbl]);
+      let cumulativeSum = 0;
+      const cumulativeCounts = counts.map((count) => {
+        cumulativeSum += count;
+        return cumulativeSum;
+      });
+
+      setTimelineData({
+        labels: sortedLabels,
+        counts,
+        cumulativeCounts,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -83,6 +112,33 @@ export default function Dashboard() {
   ];
 
   const COLORS = ["#003c33", "#ff7759", "#1863dc", "#75758a", "#17171c", "#eeece7"];
+
+  const deptData = {
+    labels: (analytics?.departmentData || []).map((d) => d.name),
+    datasets: [
+      {
+        data: (analytics?.departmentData || []).map((d) => d.value),
+        backgroundColor: COLORS,
+        borderColor: "#ffffff",
+        borderWidth: 2,
+        hoverOffset: 6,
+      },
+    ],
+  };
+
+  const skillsData = {
+    labels: (analytics?.topSkills || []).map((s) => s.skill),
+    datasets: [
+      {
+        label: "Skill Frequency",
+        data: (analytics?.topSkills || []).map((s) => s.count),
+        backgroundColor: "rgba(0, 60, 51, 0.85)",
+        hoverBackgroundColor: "#003c33",
+        borderRadius: 6,
+        borderSkipped: false,
+      },
+    ],
+  };
 
   return (
     <div className="min-h-screen bg-canvas">
@@ -277,6 +333,64 @@ export default function Dashboard() {
               </div>
             </div>
 
+            {/* Workforce Growth & Onboarding Timeline */}
+            <div className="border border-hairline bg-canvas p-6 rounded-sm">
+              <div className="mb-6 pb-2 border-b border-hairline flex items-center justify-between">
+                <div>
+                  <h2 className="font-mono text-xs uppercase tracking-wider text-primary font-bold">
+                    Workforce Analytics
+                  </h2>
+                  <p className="font-body text-xs text-slate mt-0.5">
+                    Growth rate and onboarding velocity trend metrics.
+                  </p>
+                </div>
+              </div>
+              <div className="h-72">
+                {timelineData ? (
+                  <BeautifulLine
+                    data={{
+                      labels: timelineData.labels,
+                      datasets: [
+                        {
+                          label: "Total Workforce",
+                          data: timelineData.cumulativeCounts,
+                          borderColor: "#1863dc",
+                          backgroundColor: "rgba(24, 99, 220, 0.08)",
+                          fill: true,
+                          tension: 0.4,
+                          borderWidth: 3,
+                          pointBackgroundColor: "#1863dc",
+                          pointBorderColor: "#ffffff",
+                          pointBorderWidth: 2,
+                          pointRadius: 4,
+                          pointHoverRadius: 6,
+                        },
+                        {
+                          label: "New Hires",
+                          data: timelineData.counts,
+                          borderColor: "#ff7759",
+                          backgroundColor: "rgba(255, 119, 89, 0.05)",
+                          fill: true,
+                          tension: 0.4,
+                          borderWidth: 2,
+                          borderDash: [4, 4],
+                          pointBackgroundColor: "#ff7759",
+                          pointBorderColor: "#ffffff",
+                          pointBorderWidth: 1.5,
+                          pointRadius: 3.5,
+                          pointHoverRadius: 5.5,
+                        },
+                      ],
+                    }}
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center font-mono text-xs text-slate">
+                    Loading timeline telemetry...
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* Goals & Fit Scores */}
             <div className="grid gap-6 md:grid-cols-3">
               {/* Recent Goals (2 cols) */}
@@ -362,33 +476,7 @@ export default function Dashboard() {
                 Department Allocation
               </h2>
               <div className="h-64 flex items-center justify-center">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={analytics?.departmentData || []}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={50}
-                      outerRadius={75}
-                      paddingAngle={4}
-                    >
-                      {(analytics?.departmentData || []).map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#ffffff",
-                        borderColor: "#d9d9dd",
-                        borderRadius: "4px",
-                        fontFamily: "Space Mono",
-                        fontSize: "12px",
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+                <BeautifulDoughnut data={deptData} />
               </div>
               <div className="mt-4 grid grid-cols-2 gap-2">
                 {(analytics?.departmentData || []).slice(0, 6).map((dept, index) => (
@@ -411,31 +499,7 @@ export default function Dashboard() {
                 Skill Proliferation
               </h2>
               <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={analytics?.topSkills || []} margin={{ left: -20 }}>
-                    <XAxis
-                      dataKey="skill"
-                      tick={{ fill: "#75758a", fontSize: 10, fontFamily: "Space Mono" }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-                    <YAxis
-                      tick={{ fill: "#75758a", fontSize: 10, fontFamily: "Space Mono" }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#ffffff",
-                        borderColor: "#d9d9dd",
-                        borderRadius: "4px",
-                        fontFamily: "Space Mono",
-                        fontSize: "12px",
-                      }}
-                    />
-                    <Bar dataKey="count" fill="#003c33" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+                <BeautifulBar data={skillsData} />
               </div>
             </div>
           </div>
