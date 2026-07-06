@@ -1,6 +1,32 @@
 import { useState, useRef, useEffect } from "react";
 import api from "../services/api";
-import { Send, Bot, User, Sparkles } from "lucide-react";
+import { Send, Bot, User, Sparkles, Copy, Check } from "lucide-react";
+
+function CopyButton({ text }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  return (
+    <button
+      onClick={handleCopy}
+      className="text-slate hover:text-white transition-colors p-1"
+      title="Copy to clipboard"
+    >
+      {copied ? (
+        <Check className="h-3.5 w-3.5 text-emerald-400 animate-pulse" />
+      ) : (
+        <Copy className="h-3.5 w-3.5" />
+      )}
+    </button>
+  );
+}
 
 export default function PolicyAssistant() {
   const [question, setQuestion] = useState("");
@@ -96,9 +122,12 @@ export default function PolicyAssistant() {
                       {/* AI Agent Response */}
                       <div className="flex justify-start">
                         <div className="max-w-[85%] bg-white/5 border border-white/10 px-4 py-3 rounded-xs">
-                          <div className="flex items-center gap-1.5 mb-1 text-[10px] text-action-blue uppercase tracking-wider">
-                            <Bot className="h-3 w-3" />
-                            <span>Command-R+ Response</span>
+                          <div className="flex items-center justify-between gap-1.5 mb-1 text-[10px] text-action-blue uppercase tracking-wider">
+                            <div className="flex items-center gap-1.5">
+                              <Bot className="h-3 w-3" />
+                              <span>Command-R+ Response</span>
+                            </div>
+                            <CopyButton text={msg.answer} />
                           </div>
                           <p className="font-body text-xs text-on-dark/95 leading-relaxed whitespace-pre-line">{msg.answer}</p>
                         </div>

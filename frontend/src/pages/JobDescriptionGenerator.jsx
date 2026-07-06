@@ -1,6 +1,36 @@
 import { useState } from "react";
 import api from "../services/api";
-import { Sparkles, FileText, Download } from "lucide-react";
+import { Sparkles, FileText, Download, Copy, Check } from "lucide-react";
+
+function CopyButton({ text }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  return (
+    <button
+      onClick={handleCopy}
+      className="border border-hairline bg-canvas text-primary font-mono text-[10px] uppercase tracking-wider rounded-pill px-4 py-2 hover:bg-soft-stone transition-colors inline-flex items-center gap-1.5"
+      title="Copy to clipboard"
+    >
+      {copied ? (
+        <>
+          <Check className="h-3.5 w-3.5 text-emerald-600 animate-pulse" /> Copied!
+        </>
+      ) : (
+        <>
+          <Copy className="h-3.5 w-3.5" /> Copy Text
+        </>
+      )}
+    </button>
+  );
+}
 
 export default function JobDescriptionGenerator() {
   const [form, setForm] = useState({
@@ -156,12 +186,15 @@ export default function JobDescriptionGenerator() {
                   <FileText className="h-4 w-4 text-primary" /> Generated Drafting
                 </span>
 
-                <button
-                  onClick={save}
-                  className="bg-primary text-on-primary font-mono text-[10px] uppercase tracking-wider rounded-pill px-4 py-2 hover:bg-cohere-black transition-colors inline-flex items-center gap-1.5"
-                >
-                  <Download className="h-3.5 w-3.5" /> Save Template
-                </button>
+                <div className="flex gap-2">
+                  <CopyButton text={content} />
+                  <button
+                    onClick={save}
+                    className="bg-primary text-on-primary font-mono text-[10px] uppercase tracking-wider rounded-pill px-4 py-2 hover:bg-cohere-black transition-colors inline-flex items-center gap-1.5"
+                  >
+                    <Download className="h-3.5 w-3.5" /> Save Template
+                  </button>
+                </div>
               </div>
 
               <div className="font-body text-sm text-ink leading-relaxed whitespace-pre-wrap max-h-[500px] overflow-y-auto pr-2">
