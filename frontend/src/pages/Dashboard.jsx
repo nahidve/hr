@@ -104,7 +104,7 @@ export default function Dashboard() {
             <div>
               <p className="font-mono text-xs uppercase tracking-wider text-coral font-medium mb-2">System Overview</p>
               <h1 className="font-display text-4xl font-bold tracking-tight text-primary md:text-5xl uppercase">
-                Enterprise Cockpit
+                Enterprise Employee Management
               </h1>
               <p className="font-body text-slate text-sm mt-1">
                 Real-time workforce deployment and policy compliance telemetry.
@@ -133,7 +133,7 @@ export default function Dashboard() {
       <div className="mx-auto max-w-7xl px-6 py-12 md:px-8">
         {/* Partner logos loop */}
         <div className="mb-8">
-          <LogoLoop
+          {/* <LogoLoop
             logos={[
               { node: <span className="font-mono text-sm px-3">React</span>, title: 'React' },
               { node: <span className="font-mono text-sm px-3">Next.js</span>, title: 'Next.js' },
@@ -150,7 +150,7 @@ export default function Dashboard() {
             fadeOutColor="#ffffff"
             ariaLabel="Technology partners"
             className="w-full"
-          />
+          /> */}
         </div>
         {/* Key Metrics Grid */}
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 mb-12">
