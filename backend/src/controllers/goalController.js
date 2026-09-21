@@ -31,7 +31,7 @@ export const getGoals = async (req, res) => {
 export const updateGoal = async (req, res) => {
   try {
     const goal = await Goal.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+      returnDocument: "after",
     });
 
     res.json(goal);

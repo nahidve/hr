@@ -59,8 +59,9 @@ export default function Onboarding() {
       setResume(null);
       setCurrentStep(3); // Automatically advance to step 3 on success
     } catch (error) {
-      console.error(error);
-      alert("Upload and onboarding failed. Please check the backend connection.");
+      console.error("Onboarding error:", error);
+      const serverMessage = error.response?.data?.error || error.response?.data?.message;
+      alert(serverMessage ? `Onboarding failed: ${serverMessage}` : "Upload and onboarding failed. Please check the backend connection.");
     } finally {
       setLoading(false);
     }
