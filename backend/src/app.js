@@ -18,7 +18,7 @@ const app = express();
 connectDB();
 
 /* ---------------- Health Check ---------------- */
-app.get("/health", (req, res) => {
+const healthHandler = (req, res) => {
   res.status(200).json({
     status: "UP",
     timestamp: new Date().toISOString(),
@@ -26,7 +26,10 @@ app.get("/health", (req, res) => {
     database:
       mongoose.connection.readyState === 1 ? "connected" : "disconnected",
   });
-});
+};
+
+app.get("/health", healthHandler);
+app.get("/api/health", healthHandler);
 
 app.use(
   cors({
